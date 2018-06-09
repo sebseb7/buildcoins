@@ -1,4 +1,4 @@
-all: ipbc alloy bbs edollar elya graft haven intense
+all: ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 ipbc_src:
 	git clone https://github.com/ipbc-dev/ipbc.git ipbc_src
@@ -98,12 +98,72 @@ haven_src/build/Makefile: haven_src
 	cd haven_src && mkdir build && cd build && cmake ..
 
 haven_src/build/bin/havend: haven_src/build/Makefile
-	cd haven_src/build && make -j8 daemon
+	cd haven_src/build && make -j8 daemon blockchain_import blockchain_export
 
 haven_src/build/bin/haven-wallet-cli : haven_src/build/Makefile
-	cd haven_src/build && make -j8 simplewallet
+	cd haven_src/build && make -j8 simplewallet wallet_rpc_server
 
 haven: haven_src/build/bin/havend haven_src/build/bin/haven-wallet-cli
+
+
+loki_src:
+	git clone --recursive https://github.com/loki-project/loki.git loki_src
+
+loki_src/build/Makefile: loki_src
+	cd loki_src && mkdir build && cd build && cmake ..
+
+loki_src/build/bin/lokid: loki_src/build/Makefile
+	cd loki_src/build && make -j8 daemon blockchain_import blockchain_export
+
+loki_src/build/bin/loki-wallet-cli : loki_src/build/Makefile
+	cd loki_src/build && make -j8 simplewallet wallet_rpc_server
+
+loki: loki_src/build/bin/lokid loki_src/build/bin/loki-wallet-cli
+
+
+masari_src:
+	git clone --recursive https://github.com/masari-project/masari.git masari_src
+
+masari_src/build/Makefile: masari_src
+	cd masari_src && mkdir build && cd build && cmake ..
+
+masari_src/build/bin/masarid: masari_src/build/Makefile
+	cd masari_src/build && make -j8 daemon blockchain_import blockchain_export
+
+masari_src/build/bin/masari-wallet-cli : masari_src/build/Makefile
+	cd masari_src/build && make -j8 simplewallet wallet_rpc_server
+
+masari: masari_src/build/bin/masarid masari_src/build/bin/masari-wallet-cli
+
+
+stellite_src:
+	git clone --recursive https://github.com/stellitecoin/Stellite.git stellite_src
+
+stellite_src/build/Makefile: stellite_src
+	cd stellite_src && mkdir build && cd build && cmake ..
+
+stellite_src/build/bin/stellited: stellite_src/build/Makefile
+	cd stellite_src/build && make -j8 daemon blockchain_import blockchain_export
+
+stellite_src/build/bin/stellite-wallet-cli : stellite_src/build/Makefile
+	cd stellite_src/build && make -j8 simplewallet wallet_rpc_server
+
+stellite: stellite_src/build/bin/stellited stellite_src/build/bin/stellite-wallet-cli
+
+
+monerov_src:
+	git clone --recursive https://github.com/monerov/monerov.git monerov_src
+
+monerov_src/build/Makefile: monerov_src
+	cd monerov_src && mkdir build && cd build && cmake ..
+
+monerov_src/build/bin/monerovd: monerov_src/build/Makefile
+	cd monerov_src/build && make -j8 daemon blockchain_import blockchain_export
+
+monerov_src/build/bin/monerov-wallet-cli : monerov_src/build/Makefile
+	cd monerov_src/build && make -j8 simplewallet wallet_rpc_server
+
+monerov: monerov_src/build/bin/monerovd monerov_src/build/bin/monerov-wallet-cli
 
 
 intense_src:
@@ -121,5 +181,5 @@ intense_src/build/bin/intense-wallet-cli : intense_src/build/Makefile
 intense: intense_src/build/bin/intensecoind intense_src/build/bin/intense-wallet-cli
 
 
-.PHONY : all ipbc alloy bbs edollar elya graft haven intense
+.PHONY : all ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
