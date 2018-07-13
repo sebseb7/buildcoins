@@ -1,18 +1,18 @@
 all: ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 ipbc_src:
-	git clone https://github.com/ipbc-dev/ipbc.git ipbc_src
+	git clone --recursive https://github.com/muncoin/ipbc.git ipbc_src
 
 ipbc_src/build/Makefile: ipbc_src
 	cd ipbc_src && mkdir build && cd build && cmake ..
 
 ipbc_src/build/src/ipbcd: ipbc_src/build/Makefile
-	cd ipbc_src/build && make -j8 Daemon
+	cd ipbc_src/build && make -j8 daemon
 
-ipbc_src/build/src/simplewallet: ipbc_src/build/Makefile
-	cd ipbc_src/build && make -j8 SimpleWallet
+ipbc_src/build/src/ipbc-wallet-cli: ipbc_src/build/Makefile
+	cd ipbc_src/build && make -j8 simplewallet
 
-ipbc: ipbc_src/build/src/ipbcd ipbc_src/build/src/simplewallet
+ipbc: ipbc_src/build/src/ipbcd ipbc_src/build/src/ipbc-wallet-cli
 
 
 alloy_src:
@@ -21,7 +21,7 @@ alloy_src:
 alloy_src/build/Makefile: alloy_src
 	cd alloy_src && mkdir build && cd build && cmake ..
 
-alloy_src/build/src/alloyd: ipbc_src/build/Makefile
+alloy_src/build/src/alloyd: alloy_src/build/Makefile
 	cd alloy_src/build && make -j8 Daemon
 
 alloy_src/build/src/simplewallet: alloy_src/build/Makefile
@@ -32,12 +32,11 @@ alloy: alloy_src/build/src/alloyd alloy_src/build/src/simplewallet
 
 bbs_src:
 	git clone --recursive https://github.com/bbscoin/bbscoin.git bbs_src
-	cd bbs_src && patch -p1 < ../bbs_patch
 
 bbs_src/build/Makefile: bbs_src
 	cd bbs_src && mkdir build && cd build && cmake ..
 
-bbs_src/build/src/bbscoind: ipbc_src/build/Makefile
+bbs_src/build/src/bbscoind: bbs_src/build/Makefile
 	cd bbs_src/build && make -j8 Daemon
 
 bbs_src/build/src/simplewallet: bbs_src/build/Makefile
@@ -82,7 +81,7 @@ elya_src:
 elya_src/build/Makefile: elya_src
 	cd elya_src && mkdir build && cd build && cmake ..
 
-elya_src/build/src/elyacoind: ipbc_src/build/Makefile
+elya_src/build/src/elyacoind: elya_src/build/Makefile
 	cd elya_src/build && make -j8 Daemon
 
 elya_src/build/src/simplewallet: elya_src/build/Makefile
