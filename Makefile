@@ -1,4 +1,6 @@
-all: ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+MAKEFLAGS+="-j $(shell nproc)"
+
+all: ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 ipbc_src:
 	git clone --recursive https://github.com/muncoin/ipbc.git ipbc_src
@@ -13,6 +15,34 @@ ipbc_src/build/src/ipbc-wallet-cli: ipbc_src/build/Makefile
 	cd ipbc_src/build && make -j8 simplewallet
 
 ipbc: ipbc_src/build/src/ipbcd ipbc_src/build/src/ipbc-wallet-cli
+
+bittube_src:
+	git clone --recursive https://github.com/ipbc-dev/bittube.git bittube_src
+
+bittube_src/build/Makefile: bittube_src
+	cd bittube_src && mkdir build && cd build && cmake ..
+
+bittube_src/build/src/bittubed: bittube_src/build/Makefile
+	cd bittube_src/build && make -j8 daemon
+
+bittube_src/build/src/bittube-wallet-cli: bittube_src/build/Makefile
+	cd bittube_src/build && make -j8 simplewallet
+
+bittube: bittube_src/build/src/bittubed bittube_src/build/src/bittube-wallet-cli
+
+aeon_src:
+	git clone --recursive https://github.com/aeonix/aeon.git aeon_src
+
+aeon_src/build/Makefile: aeon_src
+	cd aeon_src && mkdir build && cd build && cmake ..
+
+aeon_src/build/src/aeond: aeon_src/build/Makefile
+	cd aeon_src/build && make -j8 daemon
+
+aeon_src/build/src/aeon-wallet-cli: aeon_src/build/Makefile
+	cd aeon_src/build && make -j8 simplewallet
+
+aeon: aeon_src/build/src/aeond aeon_src/build/src/aeon-wallet-cli
 
 
 alloy_src:
@@ -180,5 +210,5 @@ intense_src/build/bin/intense-wallet-cli : intense_src/build/Makefile
 intense: intense_src/build/bin/intensecoind intense_src/build/bin/intense-wallet-cli
 
 
-.PHONY : all ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : all aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
