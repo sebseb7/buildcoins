@@ -1,6 +1,18 @@
-MAKEFLAGS+="-j $(shell nproc)"
+all: arqma italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
-all: arqma electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+italo_src:
+	git clone --recursive https://github.com/italocoin-project/italocoin.git italo_src
+
+italo_src/build/Makefile: italo_src
+	cd italo_src && mkdir build && cd build && cmake ..
+
+italo_src/build/src/italocoind: italo_src/build/Makefile
+	cd italo_src/build && make -j8 daemon blockchain_import blockchain_export
+
+italo_src/build/src/italocoin-wallet-cli: italo_src/build/Makefile
+	cd italo_src/build && make -j8 simplewallet wallet_rpc_server
+
+italo: italo_src/build/src/italocoind italo_src/build/src/italocoin-wallet-cli
 
 arqma_src:
 	git clone --recursive https://github.com/arqma/arqma.git arqma_src
@@ -9,10 +21,12 @@ arqma_src/build/Makefile: arqma_src
 	cd arqma_src && mkdir build && cd build && cmake ..
 
 arqma_src/build/src/arqmad: arqma_src/build/Makefile
-	cd arqma_src/build && make -j8 daemon
+	cd arqma_src/build && make -j8 daemon blockchain_import blockchain_export
 
 arqma_src/build/src/arqma-wallet-cli: arqma_src/build/Makefile
-	cd arqma_src/build && make -j8 simplewallet
+	cd arqma_src/build && make -j8 simplewallet wallet_rpc_server
+
+arqma: arqma_src/build/src/arqmad arqma_src/build/src/arqma-wallet-cli
 
 electroneum_src:
 	git clone --recursive https://github.com/electroneum/electroneum.git electroneum_src
@@ -21,10 +35,10 @@ electroneum_src/build/Makefile: electroneum_src
 	cd electroneum_src && mkdir build && cd build && cmake ..
 
 electroneum_src/build/src/electroneumd: electroneum_src/build/Makefile
-	cd electroneum_src/build && make -j8 daemon
+	cd electroneum_src/build && make -j8 daemon blockchain_import blockchain_export
 
 electroneum_src/build/src/electroneum-wallet-cli: electroneum_src/build/Makefile
-	cd electroneum_src/build && make -j8 simplewallet
+	cd electroneum_src/build && make -j8 simplewallet wallet_rpc_server
 
 electroneum: electroneum_src/build/src/electroneumd electroneum_src/build/src/electroneum-wallet-cli
 
@@ -35,10 +49,10 @@ monero_src/build/Makefile: monero_src
 	cd monero_src && mkdir build && cd build && cmake ..
 
 monero_src/build/src/monerod: monero_src/build/Makefile
-	cd monero_src/build && make -j8 daemon
+	cd monero_src/build && make -j8 daemon blockchain_import blockchain_export
 
 monero_src/build/src/monero-wallet-cli: monero_src/build/Makefile
-	cd monero_src/build && make -j8 simplewallet
+	cd monero_src/build && make -j8 simplewallet wallet_rpc_server
 
 monero: monero_src/build/src/monerod monero_src/build/src/monero-wallet-cli
 
@@ -49,10 +63,10 @@ ipbc_src/build/Makefile: ipbc_src
 	cd ipbc_src && mkdir build && cd build && cmake ..
 
 ipbc_src/build/src/ipbcd: ipbc_src/build/Makefile
-	cd ipbc_src/build && make -j8 daemon
+	cd ipbc_src/build && make -j8 daemon blockchain_import blockchain_export
 
 ipbc_src/build/src/ipbc-wallet-cli: ipbc_src/build/Makefile
-	cd ipbc_src/build && make -j8 simplewallet
+	cd ipbc_src/build && make -j8 simplewallet wallet_rpc_server
 
 ipbc: ipbc_src/build/src/ipbcd ipbc_src/build/src/ipbc-wallet-cli
 
@@ -63,10 +77,10 @@ bittube_src/build/Makefile: bittube_src
 	cd bittube_src && mkdir build && cd build && cmake ..
 
 bittube_src/build/src/bittubed: bittube_src/build/Makefile
-	cd bittube_src/build && make -j8 daemon
+	cd bittube_src/build && make -j8 daemon blockchain_import blockchain_export
 
 bittube_src/build/src/bittube-wallet-cli: bittube_src/build/Makefile
-	cd bittube_src/build && make -j8 simplewallet
+	cd bittube_src/build && make -j8 simplewallet wallet_rpc_server
 
 bittube: bittube_src/build/src/bittubed bittube_src/build/src/bittube-wallet-cli
 
@@ -77,10 +91,10 @@ aeon_src/build/Makefile: aeon_src
 	cd aeon_src && mkdir build && cd build && cmake ..
 
 aeon_src/build/src/aeond: aeon_src/build/Makefile
-	cd aeon_src/build && make -j8 daemon
+	cd aeon_src/build && make -j8 daemon blockchain_import blockchain_export
 
 aeon_src/build/src/aeon-wallet-cli: aeon_src/build/Makefile
-	cd aeon_src/build && make -j8 simplewallet
+	cd aeon_src/build && make -j8 simplewallet wallet_rpc_server
 
 aeon: aeon_src/build/src/aeond aeon_src/build/src/aeon-wallet-cli
 
@@ -95,7 +109,7 @@ alloy_src/build/src/alloyd: alloy_src/build/Makefile
 	cd alloy_src/build && make -j8 Daemon
 
 alloy_src/build/src/simplewallet: alloy_src/build/Makefile
-	cd alloy_src/build && make -j8 SimpleWallet
+	cd alloy_src/build && make -j8 SimpleWallet 
 
 alloy: alloy_src/build/src/alloyd alloy_src/build/src/simplewallet
 
@@ -110,7 +124,7 @@ bbs_src/build/src/bbscoind: bbs_src/build/Makefile
 	cd bbs_src/build && make -j8 Daemon
 
 bbs_src/build/src/simplewallet: bbs_src/build/Makefile
-	cd bbs_src/build && make -j8 SimpleWallet
+	cd bbs_src/build && make -j8 SimpleWallet wallet_rpc_server
 
 bbs: bbs_src/build/src/bbscoind bbs_src/build/src/simplewallet
 
@@ -122,10 +136,10 @@ edollar_src/build/Makefile: edollar_src
 	cd edollar_src && mkdir build && cd build && cmake ..
 
 edollar_src/build/bin/edollard: edollar_src/build/Makefile
-	cd edollar_src/build && make -j8 daemon
+	cd edollar_src/build && make -j8 daemon blockchain_import blockchain_export
 
 edollar_src/build/bin/edollar-wallet-cli : edollar_src/build/Makefile
-	cd edollar_src/build && make -j8 simplewallet
+	cd edollar_src/build && make -j8 simplewallet wallet_rpc_server
 
 edollar: edollar_src/build/bin/edollard edollar_src/build/bin/edollar-wallet-cli
 
@@ -137,10 +151,10 @@ graft_src/build/Makefile: graft_src
 	cd graft_src && mkdir build && cd build && cmake ..
 
 graft_src/build/bin/graftnoded: graft_src/build/Makefile
-	cd graft_src/build && make -j8 daemon
+	cd graft_src/build && make -j8 daemon blockchain_import blockchain_export
 
 graft_src/build/bin/graft-wallet-cli : graft_src/build/Makefile
-	cd graft_src/build && make -j8 simplewallet
+	cd graft_src/build && make -j8 simplewallet wallet_rpc_server
 
 graft: graft_src/build/bin/graftnoded graft_src/build/bin/graft-wallet-cli
 
@@ -242,13 +256,13 @@ intense_src/build/Makefile: intense_src
 	cd intense_src && mkdir build && cd build && cmake ..
 
 intense_src/build/bin/intensecoind: intense_src/build/Makefile
-	cd intense_src/build && make -j8 daemon
+	cd intense_src/build && make -j8 daemon blockchain_import blockchain_export
 
 intense_src/build/bin/intense-wallet-cli : intense_src/build/Makefile
-	cd intense_src/build && make -j8 simplewallet
+	cd intense_src/build && make -j8 simplewallet wallet_rpc_server
 
 intense: intense_src/build/bin/intensecoind intense_src/build/bin/intense-wallet-cli
 
 
-.PHONY : all electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : all italo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
