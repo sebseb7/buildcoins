@@ -1,6 +1,46 @@
 MAKEFLAGS+="-j $(shell nproc)"
 
-all: ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: arqma electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+
+arqma_src:
+	git clone --recursive https://github.com/arqma/arqma.git arqma_src
+
+arqma_src/build/Makefile: arqma_src
+	cd arqma_src && mkdir build && cd build && cmake ..
+
+arqma_src/build/src/arqmad: arqma_src/build/Makefile
+	cd arqma_src/build && make -j8 daemon
+
+arqma_src/build/src/arqma-wallet-cli: arqma_src/build/Makefile
+	cd arqma_src/build && make -j8 simplewallet
+
+electroneum_src:
+	git clone --recursive https://github.com/electroneum/electroneum.git electroneum_src
+
+electroneum_src/build/Makefile: electroneum_src
+	cd electroneum_src && mkdir build && cd build && cmake ..
+
+electroneum_src/build/src/electroneumd: electroneum_src/build/Makefile
+	cd electroneum_src/build && make -j8 daemon
+
+electroneum_src/build/src/electroneum-wallet-cli: electroneum_src/build/Makefile
+	cd electroneum_src/build && make -j8 simplewallet
+
+electroneum: electroneum_src/build/src/electroneumd electroneum_src/build/src/electroneum-wallet-cli
+
+monero_src:
+	git clone --recursive https://github.com/monero-project/monero.git monero_src
+
+monero_src/build/Makefile: monero_src
+	cd monero_src && mkdir build && cd build && cmake ..
+
+monero_src/build/src/monerod: monero_src/build/Makefile
+	cd monero_src/build && make -j8 daemon
+
+monero_src/build/src/monero-wallet-cli: monero_src/build/Makefile
+	cd monero_src/build && make -j8 simplewallet
+
+monero: monero_src/build/src/monerod monero_src/build/src/monero-wallet-cli
 
 ipbc_src:
 	git clone --recursive https://github.com/muncoin/ipbc.git ipbc_src
@@ -210,5 +250,5 @@ intense_src/build/bin/intense-wallet-cli : intense_src/build/Makefile
 intense: intense_src/build/bin/intensecoind intense_src/build/bin/intense-wallet-cli
 
 
-.PHONY : all aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : all electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
