@@ -1,4 +1,4 @@
-all: arqma arto italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: arqma solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 italo_src:
 	git clone --recursive https://github.com/italocoin-project/italocoin.git italo_src
@@ -113,11 +113,12 @@ alloy_src/build/src/simplewallet: alloy_src/build/Makefile
 
 alloy: alloy_src/build/src/alloyd alloy_src/build/src/simplewallet
 
+
 arto_src:
-	git clone --recursive ttps://github.com/artocash/arto.git arto_src
+	git clone --recursive https://github.com/artocash/arto.git arto_src
 
 arto_src/build/Makefile: arto_src
-	cd arto_src && mkdir build && cd build && cmake ..
+	cd arto_src && (patch -p1 <../arto_patch) && mkdir build && cd build && cmake ..
 
 arto_src/build/src/artod: arto_src/build/Makefile
 	cd arto_src/build && make -j8 Daemon
@@ -126,6 +127,21 @@ arto_src/build/src/simplewallet: arto_src/build/Makefile
 	cd arto_src/build && make -j8 SimpleWallet 
 
 arto: arto_src/build/src/artod arto_src/build/src/simplewallet
+
+
+karbo_src:
+	git clone --recursive https://github.com/seredat/karbowanec.git karbo_src
+
+karbo_src/build/Makefile: karbo_src
+	cd karbo_src && mkdir build && cd build && cmake ..
+
+karbo_src/build/src/karbowanecd: karbo_src/build/Makefile
+	cd karbo_src/build && make -j8 Daemon
+
+karbo_src/build/src/simplewallet: karbo_src/build/Makefile
+	cd karbo_src/build && make -j8 SimpleWallet 
+
+karbo: karbo_src/build/src/karbowanecd karbo_src/build/src/simplewallet
 
 
 bbs_src:
@@ -278,5 +294,50 @@ intense_src/build/bin/intense-wallet-cli : intense_src/build/Makefile
 intense: intense_src/build/bin/intensecoind intense_src/build/bin/intense-wallet-cli
 
 
-.PHONY : all italo arto electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+solace_src:
+	git clone --recursive https://github.com/schmeckles22/SolaceCoin.git solace_src
+
+solace_src/build/Makefile: solace_src
+	cd solace_src && mkdir build && cd build && cmake ..
+
+solace_src/build/bin/solaced: solace_src/build/Makefile
+	cd solace_src/build && make -j8 daemon blockchain_import blockchain_export
+
+solace_src/build/bin/solace-wallet-cli : solace_src/build/Makefile
+	cd solace_src/build && make -j8 simplewallet wallet_rpc_server
+
+solace: solace_src/build/bin/solaced intense_src/build/bin/solace-wallet-cli
+
+
+saronite_src:
+	git clone --recursive https://github.com/Saronite/saronite.git saronite_src
+
+saronite_src/build/Makefile: saronite_src
+	cd saronite_src && mkdir build && cd build && cmake ..
+
+saronite_src/build/bin/saronited: saronite_src/build/Makefile
+	cd saronite_src/build && make -j8 daemon blockchain_import blockchain_export
+
+saronite_src/build/bin/saronite-wallet-cli : saronite_src/build/Makefile
+	cd saronite_src/build && make -j8 simplewallet wallet_rpc_server
+
+saronite: saronite_src/build/bin/saronited intense_src/build/bin/saronite-wallet-cli
+
+
+#_src:
+#	git clone --recursive  _src
+#
+#_src/build/Makefile: _src
+#	cd _src && mkdir build && cd build && cmake ..
+#
+#_src/build/bin/d: _src/build/Makefile
+#	cd _src/build && make -j8 daemon blockchain_import blockchain_export
+#
+#_src/build/bin/-wallet-cli : _src/build/Makefile
+#	cd _src/build && make -j8 simplewallet wallet_rpc_server
+#
+#: _src/build/bin/d intense_src/build/bin/-wallet-cli
+
+
+.PHONY : all solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
