@@ -1,4 +1,4 @@
-all: arqma italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: arqma arto italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 italo_src:
 	git clone --recursive https://github.com/italocoin-project/italocoin.git italo_src
@@ -112,6 +112,20 @@ alloy_src/build/src/simplewallet: alloy_src/build/Makefile
 	cd alloy_src/build && make -j8 SimpleWallet 
 
 alloy: alloy_src/build/src/alloyd alloy_src/build/src/simplewallet
+
+arto_src:
+	git clone --recursive ttps://github.com/artocash/arto.git arto_src
+
+arto_src/build/Makefile: arto_src
+	cd arto_src && mkdir build && cd build && cmake ..
+
+arto_src/build/src/artod: arto_src/build/Makefile
+	cd arto_src/build && make -j8 Daemon
+
+arto_src/build/src/simplewallet: arto_src/build/Makefile
+	cd arto_src/build && make -j8 SimpleWallet 
+
+arto: arto_src/build/src/artod arto_src/build/src/simplewallet
 
 
 bbs_src:
@@ -264,5 +278,5 @@ intense_src/build/bin/intense-wallet-cli : intense_src/build/Makefile
 intense: intense_src/build/bin/intensecoind intense_src/build/bin/intense-wallet-cli
 
 
-.PHONY : all italo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : all italo arto electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
