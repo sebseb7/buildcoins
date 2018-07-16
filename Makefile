@@ -1,4 +1,4 @@
-all: arqma solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: arqma ryo solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 italo_src:
 	git clone --recursive https://github.com/italocoin-project/italocoin.git italo_src
@@ -306,7 +306,7 @@ solace_src/build/bin/solaced: solace_src/build/Makefile
 solace_src/build/bin/solace-wallet-cli : solace_src/build/Makefile
 	cd solace_src/build && make -j8 simplewallet wallet_rpc_server
 
-solace: solace_src/build/bin/solaced intense_src/build/bin/solace-wallet-cli
+solace: solace_src/build/bin/solaced solace_src/build/bin/solace-wallet-cli
 
 
 saronite_src:
@@ -321,7 +321,22 @@ saronite_src/build/bin/saronited: saronite_src/build/Makefile
 saronite_src/build/bin/saronite-wallet-cli : saronite_src/build/Makefile
 	cd saronite_src/build && make -j8 simplewallet wallet_rpc_server
 
-saronite: saronite_src/build/bin/saronited intense_src/build/bin/saronite-wallet-cli
+saronite: saronite_src/build/bin/saronited saronite_src/build/bin/saronite-wallet-cli
+
+
+ryo_src:
+	git clone --recursive https://github.com/ryo-currency/ryo-currency.git ryo_src
+
+ryo_src/build/Makefile: ryo_src
+	cd ryo_src && mkdir build && cd build && cmake ..
+
+ryo_src/build/bin/ryod: ryo_src/build/Makefile
+	cd _src/build && make -j8 daemon blockchain_import blockchain_export
+
+ryo_src/build/bin/ryo-wallet-cli : ryo_src/build/Makefile
+	cd ryo_src/build && make -j8 simplewallet wallet_rpc_server
+
+ryo: ryo_src/build/bin/ryod ryo_src/build/bin/ryo-wallet-cli
 
 
 #_src:
@@ -336,8 +351,8 @@ saronite: saronite_src/build/bin/saronited intense_src/build/bin/saronite-wallet
 #_src/build/bin/-wallet-cli : _src/build/Makefile
 #	cd _src/build && make -j8 simplewallet wallet_rpc_server
 #
-#: _src/build/bin/d intense_src/build/bin/-wallet-cli
+#: _src/build/bin/d _src/build/bin/-wallet-cli
 
 
-.PHONY : all solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : all ryo solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
