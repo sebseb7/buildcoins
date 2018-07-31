@@ -331,7 +331,7 @@ ryo_src/build/Makefile: ryo_src
 	cd ryo_src && mkdir build && cd build && cmake ..
 
 ryo_src/build/bin/ryod: ryo_src/build/Makefile
-	cd _src/build && make -j8 daemon blockchain_import blockchain_export
+	cd ryo_src/build && make -j8 daemon blockchain_import blockchain_export
 
 ryo_src/build/bin/ryo-wallet-cli : ryo_src/build/Makefile
 	cd ryo_src/build && make -j8 simplewallet wallet_rpc_server
