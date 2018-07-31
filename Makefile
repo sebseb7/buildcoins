@@ -1,4 +1,4 @@
-all: arqma ryo solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: wownero qwerty arqma niobio lines triton iridium kepl ombre ryo solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 italo_src:
 	git clone --recursive https://github.com/italocoin-project/italocoin.git italo_src
@@ -339,6 +339,132 @@ ryo_src/build/bin/ryo-wallet-cli : ryo_src/build/Makefile
 ryo: ryo_src/build/bin/ryod ryo_src/build/bin/ryo-wallet-cli
 
 
+ombre_src:
+	git clone --recursive https://github.com/ombre-projects/ombre.git ombre_src
+
+ombre_src/build/Makefile: ombre_src
+	cd ombre_src && mkdir build && cd build && cmake ..
+
+ombre_src/build/bin/ombred: ombre_src/build/Makefile
+	cd ombre_src/build && make -j8 daemon blockchain_import blockchain_export
+
+ombre_src/build/bin/ombre-wallet-cli : ombre_src/build/Makefile
+	cd ombre_src/build && make -j8 simplewallet wallet_rpc_server
+
+ombre: ombre_src/build/bin/ombred ombre_src/build/bin/ombre-wallet-cli
+
+kepl_src:
+	git clone --recursive https://github.com/kepldev/kepl.git kepl_src
+
+kepl_src/build/Makefile: kepl_src
+	cd kepl_src && (patch -p1 <../kepl_patch) && mkdir build && cd build && cmake ..
+
+kepl_src/build/src/kepld: kepl_src/build/Makefile
+	cd kepl_src/build && make -j8 Daemon
+
+kepl_src/build/src/simplewallet: _src/build/Makefile
+	cd kepl_src/build && make -j8 SimpleWallet
+
+kepl: kepl_src/build/src/kepld kepl_src/build/src/simplewallet
+
+iridium_src:
+	git clone --recursive https://github.com/iridiumdev/iridium.git iridium_src
+
+iridium_src/build/Makefile: iridium_src
+	cd iridium_src && mkdir build && cd build && cmake ..
+
+iridium_src/build/src/iridiumd: iridium_src/build/Makefile
+	cd iridium_src/build && make -j8 Daemon
+
+iridium_src/build/src/simplewallet: iridium_src/build/Makefile
+	cd iridium_src/build && make -j8 SimpleWallet
+
+iridium: iridium_src/build/src/iridiumd iridium_src/build/src/simplewallet
+
+triton_src:
+	git clone --recursive https://github.com/Triton-io/Triton.git  triton_src
+
+triton_src/build/Makefile: triton_src
+	cd triton_src && mkdir build && cd build && cmake ..
+
+triton_src/build/src/tritond: triton_src/build/Makefile
+	cd triton_src/build && make -j8 Daemon
+
+triton_src/build/src/simplewallet: triton_src/build/Makefile
+	cd triton_src/build && make -j8 SimpleWallet
+
+triton: triton_src/build/src/tritond triton_src/build/src/simplewallet
+
+lines_src:
+	git clone --recursive https://github.com/linescoin/lines.git  lines_src
+
+lines_src/build/Makefile: lines_src
+	cd lines_src && (patch -p1 <../lines_patch) && mkdir build && cd build && cmake ..
+
+lines_src/build/src/linesd: lines_src/build/Makefile
+	cd lines_src/build && make -j8 Daemon
+
+lines_src/build/src/simplewallet: lines_src/build/Makefile
+	cd lines_src/build && make -j8 SimpleWallet
+
+lines: lines_src/build/src/linesd lines_src/build/src/simplewallet
+
+niobio_src:
+	git clone --recursive https://github.com/niobio-cash/niobio-node-daemon.git niobio_src
+
+niobio_src/build/Makefile: niobio_src
+	cd niobio_src && mkdir build && cd build && cmake ..
+
+niobio_src/build/src/niobiod: niobio_src/build/Makefile
+	cd niobio_src/build && make -j8 Daemon
+
+niobio_src/build/src/simplewallet: niobio_src/build/Makefile
+	cd niobio_src/build && make -j8 SimpleWallet
+
+niobio: niobio_src/build/src/niobiod niobio_src/build/src/simplewallet
+
+wownero_src:
+	git clone --recursive https://github.com/wownero/wownero.git wownero_src
+
+wownero_src/build/Makefile: wownero_src
+	cd wownero_src && mkdir build && cd build && cmake ..
+
+wownero_src/build/bin/wownerod: wownero_src/build/Makefile
+	cd wownero_src/build && make -j8 daemon blockchain_import blockchain_export
+
+wownero_src/build/bin/wownero-wallet-cli : wownero_src/build/Makefile
+	cd wownero_src/build && make -j8 simplewallet wallet_rpc_server
+
+wownero: wownero_src/build/bin/wownerod wownero_src/build/bin/wownero-wallet-cli
+
+qwerty_src:
+	git clone --recursive https://github.com/qwertycoin-org/qwertycoin.git qwerty_src
+
+qwerty_src/build/Makefile: qwerty_src
+	cd qwerty_src && mkdir build && cd build && cmake ..
+
+qwerty_src/build/src/qwertyd: qwerty_src/build/Makefile
+	cd qwerty_src/build && make -j8 Daemon
+
+qwerty_src/build/src/simplewallet: qwerty_src/build/Makefile
+	cd qwerty_src/build && make -j8 SimpleWallet
+
+qwerty: qwerty_src/build/src/qwertyd qwerty_src/build/src/simplewallet
+
+turtle_src:
+	git clone --recursive https://github.com/turtlecoin/turtlecoin.git turtle_src
+
+turtle_src/build/Makefile: turtle_src
+	cd turtle_src && mkdir build && cd build && cmake ..
+
+turtle_src/build/src/TurleCoind: turtle_src/build/Makefile
+	cd turtle_src/build && make -j8 Daemon
+
+turtle_src/build/src/zedwallet: turtle_src/build/Makefile
+	cd turtle_src/build && make -j8 zedwallet
+
+turtle: turtle_src/build/src/TurtleCoind turtle_src/build/src/zedwallet
+
 #_src:
 #	git clone --recursive  _src
 #
@@ -353,6 +479,20 @@ ryo: ryo_src/build/bin/ryod ryo_src/build/bin/ryo-wallet-cli
 #
 #: _src/build/bin/d _src/build/bin/-wallet-cli
 
+#_src:
+#	git clone --recursive  _src
+#
+#_src/build/Makefile: _src
+#	cd _src && mkdir build && cd build && cmake ..
+#
+#_src/build/src/d: _src/build/Makefile
+#	cd _src/build && make -j8 Daemon
+#
+#_src/build/src/simplewallet: _src/build/Makefile
+#	cd _src/build && make -j8 SimpleWallet
+#
+#: _src/build/src/d _src/build/src/simplewallet
 
-.PHONY : all ryo solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+
+.PHONY : all qwerty wownero niobio lines triton iridium kepl ombre ryo solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 

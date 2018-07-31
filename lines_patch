@@ -1,0 +1,50 @@
+diff --git a/src/Platform/Linux/System/TcpConnection.cpp b/src/Platform/Linux/System/TcpConnection.cpp
+index 6831179..c607da7 100644
+--- a/src/Platform/Linux/System/TcpConnection.cpp
++++ b/src/Platform/Linux/System/TcpConnection.cpp
+@@ -81,7 +81,7 @@ size_t TcpConnection::read(uint8_t* data, size_t size) {
+   std::string message;
+   ssize_t transferred = ::recv(connection, (void *)data, size, 0);
+   if (transferred == -1) {
+-    if (errno != EAGAIN  && errno != EWOULDBLOCK) {
++    if (errno != EAGAIN  ) {
+       message = "recv failed, " + lastErrorMessage();
+     } else {
+       epoll_event connectionEvent;
+@@ -177,7 +177,7 @@ std::size_t TcpConnection::write(const uint8_t* data, size_t size) {
+ 
+   ssize_t transferred = ::send(connection, (void *)data, size, MSG_NOSIGNAL);
+   if (transferred == -1) {
+-    if (errno != EAGAIN  && errno != EWOULDBLOCK) {
++    if (errno != EAGAIN  ) {
+       message = "send failed, " + lastErrorMessage();
+     } else {
+       epoll_event connectionEvent;
+diff --git a/src/Platform/Linux/System/Timer.cpp b/src/Platform/Linux/System/Timer.cpp
+index 3727840..70db1cf 100644
+--- a/src/Platform/Linux/System/Timer.cpp
++++ b/src/Platform/Linux/System/Timer.cpp
+@@ -102,7 +102,7 @@ void Timer::sleep(std::chrono::nanoseconds duration) {
+         if (!timerContext->interrupted) {
+           uint64_t value = 0;
+           if(::read(timer, &value, sizeof value) == -1 ){
+-            if(errno == EAGAIN || errno == EWOULDBLOCK) {
++            if(errno == EAGAIN ) {
+               timerContext->interrupted = true;
+               dispatcher->pushContext(timerContext->context);
+             } else {
+diff --git a/src/Transfers/BlockchainSynchronizer.cpp b/src/Transfers/BlockchainSynchronizer.cpp
+index fb3762c..164dcf5 100644
+--- a/src/Transfers/BlockchainSynchronizer.cpp
++++ b/src/Transfers/BlockchainSynchronizer.cpp
+@@ -583,8 +583,8 @@ BlockchainSynchronizer::UpdateConsumersResult BlockchainSynchronizer::updateCons
+       result.newBlockHeight = 0;
+     if (result.hasNewBlocks) {
+       uint32_t startOffset = result.newBlockHeight - interval.startHeight;
+-    if (result.newBlockHeight == 0)
+-      startOffset = 0;
++      if (result.newBlockHeight == 0)
++        startOffset = 0;
+       uint32_t blockCount = static_cast<uint32_t>(blocks.size()) - startOffset;
+       // update consumer
+       m_logger(DEBUGGING) << "Adding blocks to consumer, consumer " << kv.first << ", start index " << result.newBlockHeight << ", count " << blockCount;
