@@ -1,4 +1,4 @@
-all: wownero qwerty arqma niobio lines triton iridium kepl ombre ryo solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: wownero turtle qwerty arqma niobio lines triton iridium kepl ombre ryo solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 italo_src:
 	git clone --recursive https://github.com/italocoin-project/italocoin.git italo_src
@@ -154,7 +154,7 @@ bbs_src/build/src/bbscoind: bbs_src/build/Makefile
 	cd bbs_src/build && make -j8 Daemon
 
 bbs_src/build/src/simplewallet: bbs_src/build/Makefile
-	cd bbs_src/build && make -j8 SimpleWallet wallet_rpc_server
+	cd bbs_src/build && make -j8 SimpleWallet
 
 bbs: bbs_src/build/src/bbscoind bbs_src/build/src/simplewallet
 
@@ -331,7 +331,7 @@ ryo_src/build/Makefile: ryo_src
 	cd ryo_src && mkdir build && cd build && cmake ..
 
 ryo_src/build/bin/ryod: ryo_src/build/Makefile
-	cd _src/build && make -j8 daemon blockchain_import blockchain_export
+	cd ryo_src/build && make -j8 daemon blockchain_import blockchain_export
 
 ryo_src/build/bin/ryo-wallet-cli : ryo_src/build/Makefile
 	cd ryo_src/build && make -j8 simplewallet wallet_rpc_server
@@ -362,7 +362,7 @@ kepl_src/build/Makefile: kepl_src
 kepl_src/build/src/kepld: kepl_src/build/Makefile
 	cd kepl_src/build && make -j8 Daemon
 
-kepl_src/build/src/simplewallet: _src/build/Makefile
+kepl_src/build/src/simplewallet: kepl_src/build/Makefile
 	cd kepl_src/build && make -j8 SimpleWallet
 
 kepl: kepl_src/build/src/kepld kepl_src/build/src/simplewallet
@@ -457,8 +457,8 @@ turtle_src:
 turtle_src/build/Makefile: turtle_src
 	cd turtle_src && mkdir build && cd build && cmake ..
 
-turtle_src/build/src/TurleCoind: turtle_src/build/Makefile
-	cd turtle_src/build && make -j8 Daemon
+turtle_src/build/src/TurtleCoind: turtle_src/build/Makefile
+	cd turtle_src/build && make -j8 TurtleCoind
 
 turtle_src/build/src/zedwallet: turtle_src/build/Makefile
 	cd turtle_src/build && make -j8 zedwallet
@@ -494,5 +494,5 @@ turtle: turtle_src/build/src/TurtleCoind turtle_src/build/src/zedwallet
 #: _src/build/src/d _src/build/src/simplewallet
 
 
-.PHONY : all qwerty wownero niobio lines triton iridium kepl ombre ryo solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : all turtle qwerty wownero niobio lines triton iridium kepl ombre ryo solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
