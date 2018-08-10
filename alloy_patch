@@ -1,0 +1,52 @@
+diff --git a/external/rocksdb/make_config.mk b/external/rocksdb/make_config.mk
+index a29493d..e6330b5 100644
+--- a/external/rocksdb/make_config.mk
++++ b/external/rocksdb/make_config.mk
+@@ -5,8 +5,8 @@ PLATFORM_LDFLAGS= -lpthread -lrt -lz -lnuma
+ JAVA_LDFLAGS= -lpthread -lrt -lz -lnuma
+ JAVA_STATIC_LDFLAGS= -lpthread -lrt
+ VALGRIND_VER=
+-PLATFORM_CCFLAGS= -DROCKSDB_PLATFORM_POSIX -DROCKSDB_LIB_IO_POSIX  -DOS_LINUX -fno-builtin-memcmp -DROCKSDB_FALLOCATE_PRESENT -DZLIB -DNUMA -DROCKSDB_MALLOC_USABLE_SIZE -DROCKSDB_PTHREAD_ADAPTIVE_MUTEX -DROCKSDB_BACKTRACE -DROCKSDB_RANGESYNC_PRESENT -DROCKSDB_SCHED_GETCPU_PRESENT -march=native  -DROCKSDB_SUPPORT_THREAD_LOCAL
+-PLATFORM_CXXFLAGS=-std=c++11  -DROCKSDB_PLATFORM_POSIX -DROCKSDB_LIB_IO_POSIX  -DOS_LINUX -fno-builtin-memcmp -DROCKSDB_FALLOCATE_PRESENT -DZLIB -DNUMA -DROCKSDB_MALLOC_USABLE_SIZE -DROCKSDB_PTHREAD_ADAPTIVE_MUTEX -DROCKSDB_BACKTRACE -DROCKSDB_RANGESYNC_PRESENT -DROCKSDB_SCHED_GETCPU_PRESENT -march=native  -DROCKSDB_SUPPORT_THREAD_LOCAL
++PLATFORM_CCFLAGS= -DROCKSDB_PLATFORM_POSIX -DROCKSDB_LIB_IO_POSIX  -DOS_LINUX -fno-builtin-memcmp -DROCKSDB_FALLOCATE_PRESENT -DZLIB -DNUMA -DROCKSDB_MALLOC_USABLE_SIZE -DROCKSDB_PTHREAD_ADAPTIVE_MUTEX -DROCKSDB_BACKTRACE -DROCKSDB_RANGESYNC_PRESENT -DROCKSDB_SCHED_GETCPU_PRESENT -march=native  -DHAVE_SSE42 -DROCKSDB_SUPPORT_THREAD_LOCAL
++PLATFORM_CXXFLAGS=-std=c++11  -DROCKSDB_PLATFORM_POSIX -DROCKSDB_LIB_IO_POSIX  -DOS_LINUX -fno-builtin-memcmp -DROCKSDB_FALLOCATE_PRESENT -DZLIB -DNUMA -DROCKSDB_MALLOC_USABLE_SIZE -DROCKSDB_PTHREAD_ADAPTIVE_MUTEX -DROCKSDB_BACKTRACE -DROCKSDB_RANGESYNC_PRESENT -DROCKSDB_SCHED_GETCPU_PRESENT -march=native  -DHAVE_SSE42 -DROCKSDB_SUPPORT_THREAD_LOCAL
+ PLATFORM_SHARED_CFLAGS=-fPIC
+ PLATFORM_SHARED_EXT=so
+ PLATFORM_SHARED_LDFLAGS=-Wl,--no-as-needed -shared -Wl,-soname -Wl,
+diff --git a/external/rocksdb/util/build_version.cc b/external/rocksdb/util/build_version.cc
+index a30c47f..f9e092f 100644
+--- a/external/rocksdb/util/build_version.cc
++++ b/external/rocksdb/util/build_version.cc
+@@ -1,4 +1,4 @@
+ #include "build_version.h"
+-const char* rocksdb_build_git_sha = "rocksdb_build_git_sha:359e48333d5aade023970d692a61434e7bf82fe8";
+-const char* rocksdb_build_git_date = "rocksdb_build_git_date:2018-03-07";
++const char* rocksdb_build_git_sha = "rocksdb_build_git_sha:e45e1c389eaa7a3642356b3e7214b27ebab102de";
++const char* rocksdb_build_git_date = "rocksdb_build_git_date:2018-08-09";
+ const char* rocksdb_build_compile_date = __DATE__;
+diff --git a/src/CryptoNoteConfig.h b/src/CryptoNoteConfig.h
+index 703da7f..4dc732c 100644
+--- a/src/CryptoNoteConfig.h
++++ b/src/CryptoNoteConfig.h
+@@ -130,7 +130,7 @@ namespace parameters {
+ #define P2P_LOCAL_GRAY_PEERLIST_LIMIT                   5000
+ 
+ #define P2P_CONNECTION_MAX_WRITE_BUFFER_SIZE            64 * 1024 * 1024
+-#define P2P_DEFAULT_CONNECTIONS_COUNT                   8
++#define P2P_DEFAULT_CONNECTIONS_COUNT                   64
+ #define P2P_DEFAULT_WHITELIST_CONNECTIONS_PERCENT       70
+ #define P2P_DEFAULT_HANDSHAKE_INTERVAL                  60
+ #define P2P_DEFAULT_PACKET_MAX_SIZE                     50000000
+diff --git a/src/P2p/NetNode.cpp b/src/P2p/NetNode.cpp
+index cfb97c5..b59188f 100755
+--- a/src/P2p/NetNode.cpp
++++ b/src/P2p/NetNode.cpp
+@@ -486,8 +486,6 @@ std::string print_peerlist_to_string(const std::list<PeerlistEntry>& pl) {
+       logger(INFO) << "External port defined as " << m_external_port;
+     }
+ 
+-    addPortMapping(logger, m_listeningPort);
+-
+     return true;
+   }
+   //-----------------------------------------------------------------------------------

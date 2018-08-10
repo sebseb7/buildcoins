@@ -103,7 +103,7 @@ alloy_src:
 	git clone --recursive https://github.com/alloyproject/alloy.git alloy_src
 
 alloy_src/build/Makefile: alloy_src
-	cd alloy_src && mkdir build && cd build && cmake ..
+	cd alloy_src && (patch -p1 <../alloy_patch) && mkdir build && cd build && cmake ..
 
 alloy_src/build/src/alloyd: alloy_src/build/Makefile
 	cd alloy_src/build && make -j8 Daemon
@@ -193,7 +193,7 @@ elya_src:
 	git clone --recursive https://github.com/elyacoin/elyacoin.git elya_src
 
 elya_src/build/Makefile: elya_src
-	cd elya_src && mkdir build && cd build && cmake ..
+	cd elya_src && (patch -p1 <../elya_patch) && mkdir build && cd build && cmake ..
 
 elya_src/build/src/elyacoind: elya_src/build/Makefile
 	cd elya_src/build && make -j8 Daemon
@@ -385,7 +385,7 @@ triton_src:
 	git clone --recursive https://github.com/Triton-io/Triton.git  triton_src
 
 triton_src/build/Makefile: triton_src
-	cd triton_src && mkdir build && cd build && cmake ..
+	cd triton_src && (patch -p1 <../triton_patch) && mkdir build && cd build && cmake ..
 
 triton_src/build/src/tritond: triton_src/build/Makefile
 	cd triton_src/build && make -j8 Daemon
@@ -441,7 +441,7 @@ qwerty_src:
 	git clone --recursive https://github.com/qwertycoin-org/qwertycoin.git qwerty_src
 
 qwerty_src/build/Makefile: qwerty_src
-	cd qwerty_src && mkdir build && cd build && cmake ..
+	cd qwerty_src && (patch -p1 <../qwerty_patch) && mkdir build && cd build && cmake ..
 
 qwerty_src/build/src/qwertyd: qwerty_src/build/Makefile
 	cd qwerty_src/build && make -j8 Daemon
@@ -455,7 +455,7 @@ turtle_src:
 	git clone --recursive https://github.com/turtlecoin/turtlecoin.git turtle_src
 
 turtle_src/build/Makefile: turtle_src
-	cd turtle_src && mkdir build && cd build && cmake ..
+	cd turtle_src && (patch -p1 <../turtle_patch) && mkdir build && cd build && cmake ..
 
 turtle_src/build/src/TurtleCoind: turtle_src/build/Makefile
 	cd turtle_src/build && make -j8 TurtleCoind

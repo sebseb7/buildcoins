@@ -1,0 +1,41 @@
+diff --git a/external/rocksdb/util/build_version.cc b/external/rocksdb/util/build_version.cc
+index 96de1da..c1f0c47 100644
+--- a/external/rocksdb/util/build_version.cc
++++ b/external/rocksdb/util/build_version.cc
+@@ -1,6 +1,4 @@
+-#include "build_version.h" 
+-const char* rocksdb_build_git_sha = "rocksdb_build_git_sha:0"; 
+-
+-const char* rocksdb_build_git_datetime = "rocksdb_build_git_datetime:04/25/18 07:06:43"; 
+-
+-const char* rocksdb_build_compile_date = __DATE__; 
++#include "build_version.h"
++const char* rocksdb_build_git_sha = "rocksdb_build_git_sha:adaa31233dee4ce7d15c2c6159bc6663007e6649";
++const char* rocksdb_build_git_date = "rocksdb_build_git_date:2018-08-09";
++const char* rocksdb_build_compile_date = __DATE__;
+diff --git a/src/CryptoNoteConfig.h b/src/CryptoNoteConfig.h
+index 0cb92db..bef089c 100644
+--- a/src/CryptoNoteConfig.h
++++ b/src/CryptoNoteConfig.h
+@@ -121,7 +121,7 @@ namespace parameters {
+ #define P2P_LOCAL_GRAY_PEERLIST_LIMIT                   5000
+ 
+ #define P2P_CONNECTION_MAX_WRITE_BUFFER_SIZE            64 * 1024 * 1024
+-#define P2P_DEFAULT_CONNECTIONS_COUNT                   8
++#define P2P_DEFAULT_CONNECTIONS_COUNT                   64
+ #define P2P_DEFAULT_WHITELIST_CONNECTIONS_PERCENT       70
+ #define P2P_DEFAULT_HANDSHAKE_INTERVAL                  60
+ #define P2P_DEFAULT_PACKET_MAX_SIZE                     50000000
+diff --git a/src/P2p/NetNode.cpp b/src/P2p/NetNode.cpp
+index 686eb02..9ba5c0c 100644
+--- a/src/P2p/NetNode.cpp
++++ b/src/P2p/NetNode.cpp
+@@ -491,8 +491,6 @@ std::string print_peerlist_to_string(const std::list<PeerlistEntry>& pl) {
+       logger(INFO) << "External port defined as " << m_external_port;
+     }
+ 
+-    addPortMapping(logger, m_listeningPort);
+-
+     return true;
+   }
+   //-----------------------------------------------------------------------------------
