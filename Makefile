@@ -1,5 +1,7 @@
 all: wownero turtle qwerty arqma niobio lines triton iridium kepl ombre ryo solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
+check: turtle_check qwerty_check
+
 italo_src:
 	git clone --recursive https://github.com/italocoin-project/italocoin.git italo_src
 
@@ -440,6 +442,9 @@ wownero: wownero_src/build/bin/wownerod wownero_src/build/bin/wownero-wallet-cli
 qwerty_src:
 	git clone --recursive https://github.com/qwertycoin-org/qwertycoin.git qwerty_src
 
+qwerty_check:
+	@if [ -d "qwerty_src" ]; then cd qwerty_src ; git fetch -v --dry-run;  fi
+
 qwerty_src/build/Makefile: qwerty_src
 	cd qwerty_src && (patch -p1 <../qwerty_patch) && mkdir build && cd build && cmake ..
 
@@ -453,6 +458,9 @@ qwerty: qwerty_src/build/src/qwertyd qwerty_src/build/src/simplewallet
 
 turtle_src:
 	git clone --recursive https://github.com/turtlecoin/turtlecoin.git turtle_src
+
+turtle_check:
+	@if [ -d "turtle_src" ]; then cd turtle_src ; git fetch -v --dry-run; fi
 
 turtle_src/build/Makefile: turtle_src
 	cd turtle_src && (patch -p1 <../turtle_patch) && mkdir build && cd build && cmake ..
@@ -494,5 +502,5 @@ turtle: turtle_src/build/src/TurtleCoind turtle_src/build/src/zedwallet
 #: _src/build/src/d _src/build/src/simplewallet
 
 
-.PHONY : all turtle qwerty wownero niobio lines triton iridium kepl ombre ryo solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : qwerty_check turtle_check check all turtle qwerty wownero niobio lines triton iridium kepl ombre ryo solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
