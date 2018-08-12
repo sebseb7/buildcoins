@@ -468,10 +468,10 @@ turtle_src/build/Makefile: turtle_src
 turtle_src/build/src/TurtleCoind: turtle_src/build/Makefile
 	cd turtle_src/build && make -j8 TurtleCoind
 
-turtle_src/build/src/zedwallet: turtle_src/build/Makefile
-	cd turtle_src/build && make -j8 zedwallet
+turtle_src/build/src/turtle-service: turtle_src/build/Makefile
+	cd turtle_src/build && make -j8 service zedwallet
 
-turtle: turtle_src/build/src/TurtleCoind turtle_src/build/src/zedwallet
+turtle: turtle_src/build/src/TurtleCoind turtle_src/build/src/turtle-service
 
 #_src:
 #	git clone --recursive  _src
