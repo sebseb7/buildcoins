@@ -315,7 +315,7 @@ saronite_src:
 	git clone --recursive https://github.com/Saronite/saronite.git saronite_src
 
 saronite_src/build/Makefile: saronite_src
-	cd saronite_src && mkdir build && cd build && cmake ..
+	cd saronite_src && git checkout feefeb4812e9ab72feb9db8e24b6ab8b79b0e0f9 && mkdir build && cd build && cmake ..
 
 saronite_src/build/bin/saronited: saronite_src/build/Makefile
 	cd saronite_src/build && make -j8 daemon blockchain_import blockchain_export
