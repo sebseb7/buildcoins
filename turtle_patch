@@ -1,0 +1,26 @@
+diff --git a/src/CryptoNoteConfig.h b/src/CryptoNoteConfig.h
+index a5610fe..e2b53a5 100755
+--- a/src/CryptoNoteConfig.h
++++ b/src/CryptoNoteConfig.h
+@@ -189,7 +189,7 @@ const size_t   P2P_LOCAL_WHITE_PEERLIST_LIMIT                =  1000;
+ const size_t   P2P_LOCAL_GRAY_PEERLIST_LIMIT                 =  5000;
+ 
+ const size_t   P2P_CONNECTION_MAX_WRITE_BUFFER_SIZE          = 32 * 1024 * 1024; // 32 MB
+-const uint32_t P2P_DEFAULT_CONNECTIONS_COUNT                 = 8;
++const uint32_t P2P_DEFAULT_CONNECTIONS_COUNT                 = 40;
+ const size_t   P2P_DEFAULT_WHITELIST_CONNECTIONS_PERCENT     = 70;
+ const uint32_t P2P_DEFAULT_HANDSHAKE_INTERVAL                = 60;            // seconds
+ const uint32_t P2P_DEFAULT_PACKET_MAX_SIZE                   = 50000000;      // 50000000 bytes maximum packet size
+diff --git a/src/P2p/NetNode.cpp b/src/P2p/NetNode.cpp
+index 8f4647e..a511b79 100755
+--- a/src/P2p/NetNode.cpp
++++ b/src/P2p/NetNode.cpp
+@@ -488,8 +488,6 @@ std::string print_peerlist_to_string(const std::list<PeerlistEntry>& pl) {
+     if(m_external_port)
+       logger(INFO) << "External port defined as " << m_external_port;
+ 
+-    addPortMapping(logger, m_listeningPort);
+-
+     return true;
+   }
+   //-----------------------------------------------------------------------------------
