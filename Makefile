@@ -135,7 +135,7 @@ karbo_src:
 	git clone --recursive https://github.com/seredat/karbowanec.git karbo_src
 
 karbo_src/build/Makefile: karbo_src
-	cd karbo_src && mkdir build && cd build && cmake ..
+	cd karbo_src && (patch -p1 <../karbo_patch) && mkdir build && cd build && cmake ..
 
 karbo_src/build/src/karbowanecd: karbo_src/build/Makefile
 	cd karbo_src/build && make -j8 Daemon
@@ -150,7 +150,7 @@ bbs_src:
 	git clone --recursive https://github.com/bbscoin/bbscoin.git bbs_src
 
 bbs_src/build/Makefile: bbs_src
-	cd bbs_src && mkdir build && cd build && cmake ..
+	cd bbs_src && (patch -p1 <../bbs_patch) && mkdir build && cd build && cmake ..
 
 bbs_src/build/src/bbscoind: bbs_src/build/Makefile
 	cd bbs_src/build && make -j8 Daemon
@@ -415,7 +415,7 @@ niobio_src:
 	git clone --recursive https://github.com/niobio-cash/niobio-node-daemon.git niobio_src
 
 niobio_src/build/Makefile: niobio_src
-	cd niobio_src && mkdir build && cd build && cmake ..
+	cd niobio_src && (patch -p1 <../niobio_patch) && mkdir build && cd build && cmake ..
 
 niobio_src/build/src/niobiod: niobio_src/build/Makefile
 	cd niobio_src/build && make -j8 Daemon
