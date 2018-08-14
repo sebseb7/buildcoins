@@ -373,7 +373,7 @@ iridium_src:
 	git clone --recursive https://github.com/iridiumdev/iridium.git iridium_src
 
 iridium_src/build/Makefile: iridium_src
-	cd iridium_src && mkdir build && cd build && cmake ..
+	cd iridium_src && (patch -p1 <../iridium_patch) && mkdir build && cd build && cmake ..
 
 iridium_src/build/src/iridiumd: iridium_src/build/Makefile
 	cd iridium_src/build && make -j8 Daemon
