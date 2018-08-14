@@ -1,4 +1,4 @@
-all: wownero turtle qwerty arqma niobio b2b lines triton iridium kepl ombre ryo solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: wownero turtle qwerty arqma niobio b2b lines triton iridium kepl ombre ryo sumo solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 check: turtle_check qwerty_check
 
@@ -341,6 +341,21 @@ ryo_src/build/bin/ryo-wallet-cli : ryo_src/build/Makefile
 ryo: ryo_src/build/bin/ryod ryo_src/build/bin/ryo-wallet-cli
 
 
+sumo_src:
+	git clone --recursive https://github.com/sumoprojects/sumokoin.git sumo_src
+
+sumo_src/build/Makefile: sumo_src
+	cd sumo_src && mkdir build && cd build && cmake ..
+
+sumo_src/build/bin/sumocoind: sumo_src/build/Makefile
+	cd sumo_src/build && make -j8 daemon blockchain_import blockchain_export
+
+sumo_src/build/bin/sumo-wallet-cli : sumo_src/build/Makefile
+	cd sumo_src/build && make -j8 simplewallet wallet_rpc_server
+
+sumo: sumo_src/build/bin/sumocoind sumo_src/build/bin/sumo-wallet-cli
+
+
 ombre_src:
 	git clone --recursive https://github.com/ombre-projects/ombre.git ombre_src
 
@@ -516,5 +531,5 @@ turtle: turtle_src/build/src/TurtleCoind turtle_src/build/src/turtle-service
 #: _src/build/src/d _src/build/src/simplewallet
 
 
-.PHONY : qwerty_check turtle_check check all turtle qwerty wownero niobio b2b lines triton iridium kepl ombre ryo solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : qwerty_check turtle_check check all turtle qwerty wownero niobio b2b lines triton iridium kepl ombre ryo sumo solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
