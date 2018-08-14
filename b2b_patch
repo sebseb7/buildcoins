@@ -1,0 +1,75 @@
+diff --git a/src/CryptoNoteConfig.h b/src/CryptoNoteConfig.h
+index cc1ab41..96927c8 100755
+--- a/src/CryptoNoteConfig.h
++++ b/src/CryptoNoteConfig.h
+@@ -137,7 +137,7 @@ const size_t   P2P_LOCAL_WHITE_PEERLIST_LIMIT                =  1000;
+ const size_t   P2P_LOCAL_GRAY_PEERLIST_LIMIT                 =  5000;
+ 
+ const size_t   P2P_CONNECTION_MAX_WRITE_BUFFER_SIZE          = 32 * 1024 * 1024; // 32 MB
+-const uint32_t P2P_DEFAULT_CONNECTIONS_COUNT                 = 8;
++const uint32_t P2P_DEFAULT_CONNECTIONS_COUNT                 = 32;
+ const size_t   P2P_DEFAULT_WHITELIST_CONNECTIONS_PERCENT     = 70;
+ const uint32_t P2P_DEFAULT_HANDSHAKE_INTERVAL                = 60;            // seconds
+ const uint32_t P2P_DEFAULT_PACKET_MAX_SIZE                   = 50000000;      // 50000000 bytes maximum packet size
+diff --git a/src/P2p/NetNode.cpp b/src/P2p/NetNode.cpp
+index e4bab5f..3c52382 100755
+--- a/src/P2p/NetNode.cpp
++++ b/src/P2p/NetNode.cpp
+@@ -548,8 +548,6 @@ void  NodeServer::drop_connection(CryptoNoteConnectionContext& context, bool add
+     if(m_external_port)
+       logger(INFO) << "External port defined as " << m_external_port;
+ 
+-    addPortMapping(logger, m_listeningPort);
+-
+     return true;
+   }
+   //-----------------------------------------------------------------------------------
+diff --git a/src/Platform/Linux/System/TcpConnection.cpp b/src/Platform/Linux/System/TcpConnection.cpp
+index 6831179..a445475 100755
+--- a/src/Platform/Linux/System/TcpConnection.cpp
++++ b/src/Platform/Linux/System/TcpConnection.cpp
+@@ -81,7 +81,7 @@ size_t TcpConnection::read(uint8_t* data, size_t size) {
+   std::string message;
+   ssize_t transferred = ::recv(connection, (void *)data, size, 0);
+   if (transferred == -1) {
+-    if (errno != EAGAIN  && errno != EWOULDBLOCK) {
++    if (errno != EAGAIN ) {
+       message = "recv failed, " + lastErrorMessage();
+     } else {
+       epoll_event connectionEvent;
+@@ -177,7 +177,7 @@ std::size_t TcpConnection::write(const uint8_t* data, size_t size) {
+ 
+   ssize_t transferred = ::send(connection, (void *)data, size, MSG_NOSIGNAL);
+   if (transferred == -1) {
+-    if (errno != EAGAIN  && errno != EWOULDBLOCK) {
++    if (errno != EAGAIN ) {
+       message = "send failed, " + lastErrorMessage();
+     } else {
+       epoll_event connectionEvent;
+diff --git a/src/Platform/Linux/System/Timer.cpp b/src/Platform/Linux/System/Timer.cpp
+index 3727840..70db1cf 100755
+--- a/src/Platform/Linux/System/Timer.cpp
++++ b/src/Platform/Linux/System/Timer.cpp
+@@ -102,7 +102,7 @@ void Timer::sleep(std::chrono::nanoseconds duration) {
+         if (!timerContext->interrupted) {
+           uint64_t value = 0;
+           if(::read(timer, &value, sizeof value) == -1 ){
+-            if(errno == EAGAIN || errno == EWOULDBLOCK) {
++            if(errno == EAGAIN ) {
+               timerContext->interrupted = true;
+               dispatcher->pushContext(timerContext->context);
+             } else {
+diff --git a/src/crypto/oaes_lib.c b/src/crypto/oaes_lib.c
+index f398bfa..2dbc51d 100755
+--- a/src/crypto/oaes_lib.c
++++ b/src/crypto/oaes_lib.c
+@@ -27,9 +27,6 @@
+  * POSSIBILITY OF SUCH DAMAGE.
+  * ---------------------------------------------------------------------------
+  */
+-static const char _NR[] = {
+-	0x4e,0x61,0x62,0x69,0x6c,0x20,0x53,0x2e,0x20,
+-	0x41,0x6c,0x20,0x52,0x61,0x6d,0x6c,0x69,0x00 };
+ 
+ #include <stddef.h>
+ #include <time.h> 
