@@ -442,6 +442,21 @@ btcn_src/build/src/simplewallet: btcn_src/build/Makefile
 btcn: btcn_src/build/src/Bitcoinoted btcn_src/build/src/simplewallet
 
 
+crep_src:
+	git clone --recursive https://github.com/crepcoin/crepcoin.git  crep_src
+
+crep_src/build/Makefile: crep_src
+	cd crep_src && (patch -p1 <../crep_patch) && mkdir build && cd build && cmake ..
+
+crep_src/build/src/crepcoind: crep_src/build/Makefile
+	cd crep_src/build && make -j8 Daemon
+
+crep_src/build/src/simplewallet: crep_src/build/Makefile
+	cd crep_src/build && make -j8 SimpleWallet
+
+crep: crep_src/build/src/crepcoind btcn_src/build/src/simplewallet
+
+
 b2b_src:
 	git clone --recursive https://github.com/oliviersinnaeve/b2bcoin.git b2b_src
 
