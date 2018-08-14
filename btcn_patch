@@ -1,21 +1,33 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 20d4157..70cef7e 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -71,7 +71,6 @@ else()
+       set(WARNINGS "-Wall -Wextra -Wpointer-arith -Wundef -Wvla -Wwrite-strings -Werror -Wno-error=stringop-overflow -Wno-error=extra -Wimplicit-fallthrough=2 -Wno-error=init-self -Wno-error=format-truncation -Wno-error=terminate -Wno-error=unused-const-variable -Wno-error=logical-op -Wno-error=sign-compare -Wno-error=unused-variable -Wno-error=unused-function -Wno-error=deprecated-declarations -Wno-error=sign-compare -Wno-error=strict-aliasing -Wno-error=type-limits -Wno-unused-parameter -Wno-error=unused-variable -Wno-error=undef -Wno-error=uninitialized -Wno-error=unused-result")
+   elseif(GCC_VERSION VERSION_GREATER 6.0)
+       # Hotfixes for GCC 6+
+-      add_definitions("-Wimplicit-fallthrough=0 -Werror=format-truncation=0")
+       MESSAGE( STATUS "GCC 6 found, enabling extra compiler switches" )
+       set(WARNINGS "-Wall -Wextra -Wpointer-arith -Wundef -Wvla -Wwrite-strings -Werror -Wno-error=extra -Wno-error=init-self -Wno-error=terminate -Wno-error=unused-const-variable -Wno-error=logical-op -Wno-error=sign-compare -Wno-error=unused-variable -Wno-error=unused-function -Wno-error=deprecated-declarations -Wno-error=sign-compare -Wno-error=strict-aliasing -Wno-error=type-limits -Wno-unused-parameter -Wno-error=unused-variable -Wno-error=undef -Wno-error=uninitialized -Wno-error=unused-result")
+   else()
 diff --git a/src/CryptoNoteConfig.h b/src/CryptoNoteConfig.h
-index eb3acdf..2add26f 100755
+index 6fe5341..6c4129c 100755
 --- a/src/CryptoNoteConfig.h
 +++ b/src/CryptoNoteConfig.h
-@@ -92,7 +92,7 @@ const size_t   P2P_LOCAL_WHITE_PEERLIST_LIMIT                = 1000;
- const size_t   P2P_LOCAL_GRAY_PEERLIST_LIMIT                 = 5000;
+@@ -118,7 +118,7 @@ const size_t   P2P_LOCAL_WHITE_PEERLIST_LIMIT                =  1000;
+ const size_t   P2P_LOCAL_GRAY_PEERLIST_LIMIT                 =  5000;
  
- const size_t   P2P_CONNECTION_MAX_WRITE_BUFFER_SIZE          = 64 * 1024 * 1024;
--const uint32_t P2P_DEFAULT_CONNECTIONS_COUNT                 = 8;
+ const size_t   P2P_CONNECTION_MAX_WRITE_BUFFER_SIZE          = 128 * 1024 * 1024; // 128 MB
+-const uint32_t P2P_DEFAULT_CONNECTIONS_COUNT                 = 12;
 +const uint32_t P2P_DEFAULT_CONNECTIONS_COUNT                 = 32;
  const size_t   P2P_DEFAULT_WHITELIST_CONNECTIONS_PERCENT     = 70;
- const uint32_t P2P_DEFAULT_HANDSHAKE_INTERVAL                = 60;
- const uint32_t P2P_DEFAULT_PACKET_MAX_SIZE                   = 50000000;
+ const uint32_t P2P_DEFAULT_HANDSHAKE_INTERVAL                = 60;            // seconds
+ const uint32_t P2P_DEFAULT_PACKET_MAX_SIZE                   = 100000000;      // 100000000 bytes maximum packet size
 diff --git a/src/P2p/NetNode.cpp b/src/P2p/NetNode.cpp
-index 4ee093d..5616378 100755
+index db2c953..b3b120b 100755
 --- a/src/P2p/NetNode.cpp
 +++ b/src/P2p/NetNode.cpp
-@@ -472,8 +472,6 @@ std::string print_peerlist_to_string(const std::list<PeerlistEntry>& pl) {
+@@ -497,8 +497,6 @@ std::string print_peerlist_to_string(const std::list<PeerlistEntry>& pl) {
      if(m_external_port)
        logger(INFO) << "External port defined as " << m_external_port;
  
@@ -24,65 +36,3 @@ index 4ee093d..5616378 100755
      return true;
    }
    //-----------------------------------------------------------------------------------
-diff --git a/src/Platform/Linux/System/TcpConnection.cpp b/src/Platform/Linux/System/TcpConnection.cpp
-index b652899..b902788 100755
---- a/src/Platform/Linux/System/TcpConnection.cpp
-+++ b/src/Platform/Linux/System/TcpConnection.cpp
-@@ -68,7 +68,7 @@ size_t TcpConnection::read(uint8_t* data, size_t size) {
-   std::string message;
-   ssize_t transferred = ::recv(connection, (void *)data, size, 0);
-   if (transferred == -1) {
--    if (errno != EAGAIN  && errno != EWOULDBLOCK) {
-+    if (errno != EAGAIN  ) {
-       message = "recv failed, " + lastErrorMessage();
-     } else {
-       epoll_event connectionEvent;
-@@ -164,7 +164,7 @@ std::size_t TcpConnection::write(const uint8_t* data, size_t size) {
- 
-   ssize_t transferred = ::send(connection, (void *)data, size, MSG_NOSIGNAL);
-   if (transferred == -1) {
--    if (errno != EAGAIN  && errno != EWOULDBLOCK) {
-+    if (errno != EAGAIN  ) {
-       message = "send failed, " + lastErrorMessage();
-     } else {
-       epoll_event connectionEvent;
-diff --git a/src/Platform/Linux/System/Timer.cpp b/src/Platform/Linux/System/Timer.cpp
-index f9ee32d..f3028dc 100755
---- a/src/Platform/Linux/System/Timer.cpp
-+++ b/src/Platform/Linux/System/Timer.cpp
-@@ -89,7 +89,7 @@ void Timer::sleep(std::chrono::nanoseconds duration) {
-         if (!timerContext->interrupted) {
-           uint64_t value = 0;
-           if(::read(timer, &value, sizeof value) == -1 ){
--            if(errno == EAGAIN || errno == EWOULDBLOCK) {
-+            if(errno == EAGAIN ) {
-               timerContext->interrupted = true;
-               dispatcher->pushContext(timerContext->context);
-             } else {
-diff --git a/src/crypto/oaes_lib.c b/src/crypto/oaes_lib.c
-index f398bfa..31778e4 100755
---- a/src/crypto/oaes_lib.c
-+++ b/src/crypto/oaes_lib.c
-@@ -27,10 +27,6 @@
-  * POSSIBILITY OF SUCH DAMAGE.
-  * ---------------------------------------------------------------------------
-  */
--static const char _NR[] = {
--	0x4e,0x61,0x62,0x69,0x6c,0x20,0x53,0x2e,0x20,
--	0x41,0x6c,0x20,0x52,0x61,0x6d,0x6c,0x69,0x00 };
--
- #include <stddef.h>
- #include <time.h> 
- #include <sys/timeb.h>
-diff --git a/src/crypto/slow-hash.cpp b/src/crypto/slow-hash.cpp
-index 5222c7c..df9a10d 100755
---- a/src/crypto/slow-hash.cpp
-+++ b/src/crypto/slow-hash.cpp
-@@ -54,7 +54,6 @@ namespace Crypto {
- 
-   cn_context::~cn_context() {
-     if (munmap(data, MAP_SIZE) != 0) {
--      throw bad_alloc();
-     }
-   }
- 

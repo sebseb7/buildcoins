@@ -428,18 +428,18 @@ lines: lines_src/build/src/linesd lines_src/build/src/simplewallet
 
 
 btcn_src:
-	git clone --recursive https://github.com/bitcoin-note/bitcoin-note.git  btcn_src
+	git clone --recursive https://github.com/Bitcoinote/Bitcoinote-Core.git  btcn_src
 
 btcn_src/build/Makefile: btcn_src
 	cd btcn_src && (patch -p1 <../btcn_patch) && mkdir build && cd build && cmake ..
 
-btcn_src/build/src/bitnoted: btcn_src/build/Makefile
+btcn_src/build/src/Bitcoinoted: btcn_src/build/Makefile
 	cd btcn_src/build && make -j8 Daemon
 
 btcn_src/build/src/simplewallet: btcn_src/build/Makefile
 	cd btcn_src/build && make -j8 SimpleWallet
 
-btcn: btcn_src/build/src/bitnoted btcn_src/build/src/simplewallet
+btcn: btcn_src/build/src/Bitcoinoted btcn_src/build/src/simplewallet
 
 
 b2b_src:
