@@ -225,7 +225,7 @@ loki_src:
 	git clone --recursive https://github.com/loki-project/loki.git loki_src
 
 loki_src/build/Makefile: loki_src
-	cd loki_src && mkdir build && cd build && cmake ..
+	cd loki_src && git checkout dcd5ff7284a5dee724a1d695eddb9cd7c83e6274 && mkdir build && cd build && cmake ..
 
 loki_src/build/bin/lokid: loki_src/build/Makefile
 	cd loki_src/build && make -j8 daemon blockchain_import blockchain_export
