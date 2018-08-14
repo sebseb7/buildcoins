@@ -1,4 +1,4 @@
-all: wownero turtle qwerty arqma niobio lines triton iridium kepl ombre ryo solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: wownero turtle qwerty arqma niobio b2b lines triton iridium kepl ombre ryo solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 check: turtle_check qwerty_check
 
@@ -411,6 +411,20 @@ lines_src/build/src/simplewallet: lines_src/build/Makefile
 
 lines: lines_src/build/src/linesd lines_src/build/src/simplewallet
 
+b2b_src:
+	git clone --recursive https://github.com/oliviersinnaeve/b2bcoin.git b2b_src
+
+b2b_src/build/Makefile: b2b_src
+	cd b2b_src && (patch -p1 <../b2b_patch) && mkdir build && cd build && cmake ..
+
+b2b_src/build/src/b2bcoind: b2b_src/build/Makefile
+	cd b2b_src/build && make -j8 Daemon
+
+b2b_src/build/src/simplewallet: b2b_src/build/Makefile
+	cd b2b_src/build && make -j8 SimpleWallet
+
+b2b: b2b_src/build/src/b2bcoind b2b_src/build/src/simplewallet
+
 niobio_src:
 	git clone --recursive https://github.com/niobio-cash/niobio-node-daemon.git niobio_src
 
@@ -502,5 +516,5 @@ turtle: turtle_src/build/src/TurtleCoind turtle_src/build/src/turtle-service
 #: _src/build/src/d _src/build/src/simplewallet
 
 
-.PHONY : qwerty_check turtle_check check all turtle qwerty wownero niobio lines triton iridium kepl ombre ryo solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : qwerty_check turtle_check check all turtle qwerty wownero niobio b2b lines triton iridium kepl ombre ryo solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
