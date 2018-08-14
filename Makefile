@@ -1,4 +1,4 @@
-all: wownero turtle qwerty arqma niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: wownero crep turtle qwerty arqma niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 check: turtle_check qwerty_check
 
@@ -393,10 +393,10 @@ iridium_src/build/Makefile: iridium_src
 iridium_src/build/src/iridiumd: iridium_src/build/Makefile
 	cd iridium_src/build && make -j8 Daemon
 
-iridium_src/build/src/simplewallet: iridium_src/build/Makefile
+iridium_src/build/src/iridium_simplewallet: iridium_src/build/Makefile
 	cd iridium_src/build && make -j8 SimpleWallet
 
-iridium: iridium_src/build/src/iridiumd iridium_src/build/src/simplewallet
+iridium: iridium_src/build/src/iridiumd iridium_src/build/src/iridium_simplewallet
 
 triton_src:
 	git clone --recursive https://github.com/Triton-io/Triton.git  triton_src
@@ -404,13 +404,13 @@ triton_src:
 triton_src/build/Makefile: triton_src
 	cd triton_src && (patch -p1 <../triton_patch) && mkdir build && cd build && cmake ..
 
-triton_src/build/src/tritond: triton_src/build/Makefile
+triton_src/build/src/Tritond: triton_src/build/Makefile
 	cd triton_src/build && make -j8 Daemon
 
-triton_src/build/src/simplewallet: triton_src/build/Makefile
+triton_src/build/src/TritonSimpleWallet: triton_src/build/Makefile
 	cd triton_src/build && make -j8 SimpleWallet
 
-triton: triton_src/build/src/tritond triton_src/build/src/simplewallet
+triton: triton_src/build/src/Tritond triton_src/build/src/TritonSimpleWallet
 
 lines_src:
 	git clone --recursive https://github.com/linescoin/lines.git  lines_src
@@ -562,5 +562,5 @@ turtle: turtle_src/build/src/TurtleCoind turtle_src/build/src/turtle-service
 #: _src/build/src/d _src/build/src/simplewallet
 
 
-.PHONY : qwerty_check turtle_check check all turtle qwerty wownero niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : qwerty_check turtle_check check all turtle crep qwerty wownero niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
