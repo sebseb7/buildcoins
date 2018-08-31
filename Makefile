@@ -454,7 +454,7 @@ crep_src/build/src/crepcoind: crep_src/build/Makefile
 crep_src/build/src/simplewallet: crep_src/build/Makefile
 	cd crep_src/build && make -j8 SimpleWallet
 
-crep: crep_src/build/src/crepcoind btcn_src/build/src/simplewallet
+crep: crep_src/build/src/crepcoind crep_src/build/src/simplewallet
 
 
 b2b_src:
