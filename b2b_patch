@@ -1,16 +1,33 @@
 diff --git a/src/CryptoNoteConfig.h b/src/CryptoNoteConfig.h
-index cc1ab41..96927c8 100755
+index 498ee78..31bbd0c 100755
 --- a/src/CryptoNoteConfig.h
 +++ b/src/CryptoNoteConfig.h
-@@ -137,7 +137,7 @@ const size_t   P2P_LOCAL_WHITE_PEERLIST_LIMIT                =  1000;
- const size_t   P2P_LOCAL_GRAY_PEERLIST_LIMIT                 =  5000;
+@@ -145,7 +145,7 @@ const size_t   P2P_LOCAL_WHITE_PEERLIST_LIMIT                = 1000;
+ const size_t   P2P_LOCAL_GRAY_PEERLIST_LIMIT                 = 5000;
  
- const size_t   P2P_CONNECTION_MAX_WRITE_BUFFER_SIZE          = 32 * 1024 * 1024; // 32 MB
+ const size_t   P2P_CONNECTION_MAX_WRITE_BUFFER_SIZE          = 64 * 1024 * 1024; // 64 MB
 -const uint32_t P2P_DEFAULT_CONNECTIONS_COUNT                 = 8;
 +const uint32_t P2P_DEFAULT_CONNECTIONS_COUNT                 = 32;
  const size_t   P2P_DEFAULT_WHITELIST_CONNECTIONS_PERCENT     = 70;
  const uint32_t P2P_DEFAULT_HANDSHAKE_INTERVAL                = 60;            // seconds
  const uint32_t P2P_DEFAULT_PACKET_MAX_SIZE                   = 50000000;      // 50000000 bytes maximum packet size
+diff --git a/src/CryptoNoteCore/Currency.cpp b/src/CryptoNoteCore/Currency.cpp
+index 151f823..369e00c 100755
+--- a/src/CryptoNoteCore/Currency.cpp
++++ b/src/CryptoNoteCore/Currency.cpp
+@@ -694,9 +694,9 @@ Difficulty Currency::nextDifficultyZawyLWMAfix(uint8_t version, uint32_t blockIn
+     // Keep LWMA sane in case something unforeseen occurs.
+     if (static_cast<int64_t>(std::round(LWMA)) < T / 20)
+       LWMA = static_cast<double_t>(T / 20);
+-      harmonic_mean_D = N / sum_inverse_D * adjust;
+-      nextDifficulty = harmonic_mean_D * T / LWMA;
+-      next_difficulty = static_cast<uint64_t>(nextDifficulty);
++    harmonic_mean_D = N / sum_inverse_D * adjust;
++    nextDifficulty = harmonic_mean_D * T / LWMA;
++    next_difficulty = static_cast<uint64_t>(nextDifficulty);
+     
+     // minimum limit
+     if (next_difficulty < m_zawyLWMAfixDifficultyMin) {
 diff --git a/src/P2p/NetNode.cpp b/src/P2p/NetNode.cpp
 index e4bab5f..3c52382 100755
 --- a/src/P2p/NetNode.cpp
