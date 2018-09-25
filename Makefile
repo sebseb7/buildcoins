@@ -1,4 +1,4 @@
-all: wownero crep turtle qwerty arqma niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: wownero crep turtle tyche qwerty arqma niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 check: turtle_check qwerty_check
 
@@ -471,6 +471,22 @@ b2b_src/build/src/simplewallet: b2b_src/build/Makefile
 
 b2b: b2b_src/build/src/b2bcoind b2b_src/build/src/simplewallet
 
+
+tyche_src:
+	git clone --recursive https://github.com/blockchain-next/TycheCash.git tyche_src
+
+tyche_src/build/Makefile: tyche_src
+	cd tyche_src && (patch -p1 <../tyche_patch) && mkdir build && cd build && cmake ..
+
+tyche_src/build/src/TycheCash: tyche_src/build/Makefile
+	cd tyche_src/build && make -j8 Daemon
+
+tyche_src/build/src/simplewallet: tyche_src/build/Makefile
+	cd tyche_src/build && make -j8 SimpleWallet
+
+tyche: tyche_src/build/src/TycheCash tyche_src/build/src/simplewallet
+
+
 niobio_src:
 	git clone --recursive https://github.com/niobio-cash/niobio-node-daemon.git niobio_src
 
@@ -562,5 +578,5 @@ turtle: turtle_src/build/src/TurtleCoind turtle_src/build/src/turtle-service
 #: _src/build/src/d _src/build/src/simplewallet
 
 
-.PHONY : qwerty_check turtle_check check all turtle crep qwerty wownero niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : qwerty_check turtle_check check all tyche turtle crep qwerty wownero niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
