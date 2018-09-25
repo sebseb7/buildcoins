@@ -1,0 +1,104 @@
+diff --git a/src/P2p/NetNode.cpp b/src/P2p/NetNode.cpp
+index 1005834..66c08b0 100644
+--- a/src/P2p/NetNode.cpp
++++ b/src/P2p/NetNode.cpp
+@@ -470,8 +470,6 @@ namespace TycheCash
+     if(m_external_port)
+       logger(INFO) << "External port defined as " << m_external_port;
+ 
+-    addPortMapping(logger, m_listeningPort);
+-
+     return true;
+   }
+   //-----------------------------------------------------------------------------------
+diff --git a/src/Platform/Linux/System/TcpConnection.cpp b/src/Platform/Linux/System/TcpConnection.cpp
+index 67b60c1..97f32d3 100644
+--- a/src/Platform/Linux/System/TcpConnection.cpp
++++ b/src/Platform/Linux/System/TcpConnection.cpp
+@@ -68,7 +68,7 @@ size_t TcpConnection::read(uint8_t* data, size_t size) {
+   std::string message;
+   ssize_t transferred = ::recv(connection, (void *)data, size, 0);
+   if (transferred == -1) {
+-    if (errno != EAGAIN  && errno != EWOULDBLOCK) {
++    if (errno != EAGAIN  ) {
+       message = "recv failed, " + lastErrorMessage();
+     } else {
+       epoll_event connectionEvent;
+@@ -164,7 +164,7 @@ std::size_t TcpConnection::write(const uint8_t* data, size_t size) {
+ 
+   ssize_t transferred = ::send(connection, (void *)data, size, MSG_NOSIGNAL);
+   if (transferred == -1) {
+-    if (errno != EAGAIN  && errno != EWOULDBLOCK) {
++    if (errno != EAGAIN  ) {
+       message = "send failed, " + lastErrorMessage();
+     } else {
+       epoll_event connectionEvent;
+diff --git a/src/Platform/Linux/System/Timer.cpp b/src/Platform/Linux/System/Timer.cpp
+index e403d67..b9b2c9f 100644
+--- a/src/Platform/Linux/System/Timer.cpp
++++ b/src/Platform/Linux/System/Timer.cpp
+@@ -89,7 +89,7 @@ void Timer::sleep(std::chrono::nanoseconds duration) {
+         if (!timerContext->interrupted) {
+           uint64_t value = 0;
+           if(::read(timer, &value, sizeof value) == -1 ){
+-            if(errno == EAGAIN || errno == EWOULDBLOCK) {
++            if(errno == EAGAIN ) {
+               timerContext->interrupted = true;
+               dispatcher->pushContext(timerContext->context);
+             } else {
+diff --git a/src/TycheCashConfig.h b/src/TycheCashConfig.h
+index 5860bc8..53837b7 100644
+--- a/src/TycheCashConfig.h
++++ b/src/TycheCashConfig.h
+@@ -104,7 +104,7 @@ const size_t   P2P_LOCAL_WHITE_PEERLIST_LIMIT               = 1000;
+ const size_t   P2P_LOCAL_GRAY_PEERLIST_LIMIT                = 5000;
+ 
+ const size_t   P2P_CONNECTION_MAX_WRITE_BUFFER_SIZE         = 64 * 1024 * 1024; // 64 MB
+-const uint32_t P2P_DEFAULT_CONNECTIONS_COUNT                = 8;
++const uint32_t P2P_DEFAULT_CONNECTIONS_COUNT                = 32;
+ const size_t   P2P_DEFAULT_WHITELIST_CONNECTIONS_PERCENT    = 70;
+ const uint32_t P2P_DEFAULT_HANDSHAKE_INTERVAL               = 60; // seconds
+ const uint32_t P2P_DEFAULT_PACKET_MAX_SIZE                  = 50000000; // 50000000 bytes maximum packet size
+diff --git a/src/crypto/crypto.cpp b/src/crypto/crypto.cpp
+index fa7974d..6db199d 100644
+--- a/src/crypto/crypto.cpp
++++ b/src/crypto/crypto.cpp
+@@ -343,10 +343,10 @@ namespace Crypto {
+     struct {
+       EllipticCurvePoint a, b;
+     } ab[];
+-  };
++  }rcs;
+ 
+   static inline size_t rs_comm_size(size_t pubs_count) {
+-    return sizeof(rs_comm) + pubs_count * sizeof(rs_comm().ab[0]);
++    return sizeof(rs_comm) + pubs_count * sizeof(rcs.ab[0]);
+   }
+ 
+   void crypto_ops::generate_ring_signature(const Hash &prefix_hash, const KeyImage &image,
+diff --git a/src/crypto/oaes_lib.c b/src/crypto/oaes_lib.c
+index 910ac00..6f6447a 100644
+--- a/src/crypto/oaes_lib.c
++++ b/src/crypto/oaes_lib.c
+@@ -27,9 +27,6 @@
+  * POSSIBILITY OF SUCH DAMAGE.
+  * ---------------------------------------------------------------------------
+  */
+-static const char _NR[] = {
+-	0x4e,0x61,0x62,0x69,0x6c,0x20,0x53,0x2e,0x20,
+-	0x41,0x6c,0x20,0x52,0x61,0x6d,0x6c,0x69,0x00 };
+ 
+ #include <stddef.h>
+ #include <time.h> 
+diff --git a/src/crypto/slow-hash.cpp b/src/crypto/slow-hash.cpp
+index 0c1b5bf..e50453a 100644
+--- a/src/crypto/slow-hash.cpp
++++ b/src/crypto/slow-hash.cpp
+@@ -51,7 +51,6 @@ namespace Crypto {
+ 
+   cn_context::~cn_context() {
+     if (munmap(data, MAP_SIZE) != 0) {
+-      throw bad_alloc();
+     }
+   }
+ 
