@@ -54,7 +54,7 @@ monero_src/build/src/monerod: monero_src/build/Makefile
 	cd monero_src/build && make -j8 daemon blockchain_import blockchain_export
 
 monero_src/build/src/monero-wallet-cli: monero_src/build/Makefile
-	cd monero_src/build && make -j8 simplewallet wallet_rpc_server
+	cd monero_src/build && make -j8 simplewallet
 
 monero: monero_src/build/src/monerod monero_src/build/src/monero-wallet-cli
 
@@ -276,7 +276,7 @@ monerov_src/build/bin/monerovd: monerov_src/build/Makefile
 	cd monerov_src/build && make -j8 daemon blockchain_import blockchain_export
 
 monerov_src/build/bin/monerov-wallet-cli : monerov_src/build/Makefile
-	cd monerov_src/build && make -j8 simplewallet wallet_rpc_server
+	cd monerov_src/build && make -j8 simplewallet
 
 monerov: monerov_src/build/bin/monerovd monerov_src/build/bin/monerov-wallet-cli
 

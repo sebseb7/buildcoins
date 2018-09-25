@@ -1,3 +1,5 @@
-libzmq3-dev libssl-dev libreadline-dev libboost-all-dev git cmake zlib1g-dev pkg-config libunbound-dev libsodium-dev libpgm-dev
+libzmq3-dev libssl-dev libreadline-dev libboost-all-dev git cmake zlib1g-dev pkg-config libunbound-dev libsodium-dev libpgm-dev libuv1-dev
 
-htop openssh-server netcat-openbsd 
+libpcre3-dev
+
+htop netcat-openbsd certbot 
