@@ -1,4 +1,4 @@
-all: wownero crep turtle tyche qwerty arqma niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace saronite arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: wownero crep turtle tyche qwerty arqma niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 check: turtle_check qwerty_check
 
@@ -225,7 +225,7 @@ loki_src:
 	git clone --recursive https://github.com/loki-project/loki.git loki_src
 
 loki_src/build/Makefile: loki_src
-	cd loki_src && git checkout b73aa8ee1c10d88d66e834be8ab421ae16722aa8 && mkdir build && cd build && cmake ..
+	cd loki_src && mkdir build && cd build && cmake ..
 
 loki_src/build/bin/lokid: loki_src/build/Makefile
 	cd loki_src/build && make -j8 daemon blockchain_import blockchain_export
@@ -310,20 +310,6 @@ solace_src/build/bin/solace-wallet-cli : solace_src/build/Makefile
 
 solace: solace_src/build/bin/solaced solace_src/build/bin/solace-wallet-cli
 
-
-saronite_src:
-	git clone --recursive https://github.com/Saronite/saronite.git saronite_src
-
-saronite_src/build/Makefile: saronite_src
-	cd saronite_src && git checkout feefeb4812e9ab72feb9db8e24b6ab8b79b0e0f9 && mkdir build && cd build && cmake ..
-
-saronite_src/build/bin/saronited: saronite_src/build/Makefile
-	cd saronite_src/build && make -j8 daemon blockchain_import blockchain_export
-
-saronite_src/build/bin/saronite-wallet-cli : saronite_src/build/Makefile
-	cd saronite_src/build && make -j8 simplewallet wallet_rpc_server
-
-saronite: saronite_src/build/bin/saronited saronite_src/build/bin/saronite-wallet-cli
 
 
 ryo_src:
@@ -578,5 +564,5 @@ turtle: turtle_src/build/src/TurtleCoind turtle_src/build/src/turtle-service
 #: _src/build/src/d _src/build/src/simplewallet
 
 
-.PHONY : qwerty_check turtle_check check all tyche turtle crep qwerty wownero niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace saronite italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : qwerty_check turtle_check check all tyche turtle crep qwerty wownero niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
