@@ -1,4 +1,4 @@
-all: wownero crep turtle tyche qwerty arqma niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: wownero turtle tyche qwerty arqma niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 check: turtle_check qwerty_check
 
@@ -428,21 +428,6 @@ btcn_src/build/src/simplewallet: btcn_src/build/Makefile
 btcn: btcn_src/build/src/Bitcoinoted btcn_src/build/src/simplewallet
 
 
-crep_src:
-	git clone --recursive https://github.com/crepcoin/crepcoin.git  crep_src
-
-crep_src/build/Makefile: crep_src
-	cd crep_src && (patch -p1 <../crep_patch) && mkdir build && cd build && cmake ..
-
-crep_src/build/src/crepcoind: crep_src/build/Makefile
-	cd crep_src/build && make -j8 Daemon
-
-crep_src/build/src/simplewallet: crep_src/build/Makefile
-	cd crep_src/build && make -j8 SimpleWallet
-
-crep: crep_src/build/src/crepcoind crep_src/build/src/simplewallet
-
-
 b2b_src:
 	git clone --recursive https://github.com/oliviersinnaeve/b2bcoin.git b2b_src
 
@@ -564,5 +549,5 @@ turtle: turtle_src/build/src/TurtleCoind turtle_src/build/src/turtle-service
 #: _src/build/src/d _src/build/src/simplewallet
 
 
-.PHONY : qwerty_check turtle_check check all tyche turtle crep qwerty wownero niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : qwerty_check turtle_check check all tyche turtle qwerty wownero niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
