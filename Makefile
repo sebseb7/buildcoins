@@ -508,7 +508,7 @@ citi_src:
 	git clone --recursive https://github.com/citicashio/citicash.git citi_src
 
 citi_src/build/Makefile: citi_src
-	cd xcash_src && mkdir build && cd build && cmake ..
+	cd citi_src && mkdir build && cd build && cmake ..
 
 citi_src/build/bin/citicashd: citi_src/build/Makefile
 	cd citi_src/build && make -j8 daemon blockchain_import blockchain_export
