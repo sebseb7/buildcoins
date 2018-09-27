@@ -1,6 +1,6 @@
-all: wownero turtle tyche qwerty arqma niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: wownero safex xcash tyche qwerty arqma niobio b2b btcn lines triton iridium ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
-check: turtle_check qwerty_check
+check: qwerty_check
 
 italo_src:
 	git clone --recursive https://github.com/italocoin-project/italocoin.git italo_src
@@ -356,19 +356,6 @@ ombre_src/build/bin/ombre-wallet-cli : ombre_src/build/Makefile
 
 ombre: ombre_src/build/bin/ombred ombre_src/build/bin/ombre-wallet-cli
 
-kepl_src:
-	git clone --recursive https://github.com/kepldev/kepl.git kepl_src
-
-kepl_src/build/Makefile: kepl_src
-	cd kepl_src && (patch -p1 <../kepl_patch) && mkdir build && cd build && cmake ..
-
-kepl_src/build/src/kepld: kepl_src/build/Makefile
-	cd kepl_src/build && make -j8 Daemon
-
-kepl_src/build/src/simplewallet: kepl_src/build/Makefile
-	cd kepl_src/build && make -j8 SimpleWallet
-
-kepl: kepl_src/build/src/kepld kepl_src/build/src/simplewallet
 
 iridium_src:
 	git clone --recursive https://github.com/iridiumdev/iridium.git iridium_src
@@ -476,7 +463,7 @@ wownero_src:
 	git clone --recursive https://github.com/wownero/wownero.git wownero_src
 
 wownero_src/build/Makefile: wownero_src
-	cd wownero_src && mkdir build && cd build && cmake ..
+	cd wownero_src && git checkout 6177e8e062e4e80dc4b24e023a3b015807a51f31 && mkdir build && cd build && cmake ..
 
 wownero_src/build/bin/wownerod: wownero_src/build/Makefile
 	cd wownero_src/build && make -j8 daemon blockchain_import blockchain_export
@@ -485,6 +472,37 @@ wownero_src/build/bin/wownero-wallet-cli : wownero_src/build/Makefile
 	cd wownero_src/build && make -j8 simplewallet wallet_rpc_server
 
 wownero: wownero_src/build/bin/wownerod wownero_src/build/bin/wownero-wallet-cli
+
+
+safex_src:
+	git clone --recursive https://github.com/safex/safexcore.git safex_src
+
+safex_src/build/Makefile: safex_src
+	cd safex_src && mkdir build && cd build && cmake -D BUILD_WALLET_RPC=ON -D BUILD_ADVANCED_WALLET=ON ..
+
+safex_src/build/bin/safexd: safex_src/build/Makefile
+	cd safex_src/build && make -j8 daemon blockchain_import blockchain_export
+
+safex_src/build/bin/safex-wallet-cli : safex_src/build/Makefile
+	cd safex_src/build && make -j8 simplewallet wallet_rpc_server
+
+safex: safex_src/build/bin/safexd safex_src/build/bin/safex-wallet-cli
+
+
+xcash_src:
+	git clone --recursive https://github.com/X-CASH-official/X-CASH.git xcash_src
+
+xcash_src/build/Makefile: xcash_src
+	cd xcash_src && mkdir build && cd build && cmake ..
+
+xcash_src/build/bin/xcashd: xcash_src/build/Makefile
+	cd xcash_src/build && make -j8 daemon blockchain_import blockchain_export
+
+xcash_src/build/bin/xcash-wallet-cli : xcash_src/build/Makefile
+	cd xcash_src/build && make -j8 simplewallet wallet_rpc_server
+
+xcash: xcash_src/build/bin/xcashd xcash_src/build/bin/xcash-wallet-cli
+
 
 qwerty_src:
 	git clone --recursive https://github.com/qwertycoin-org/qwertycoin.git qwerty_src
@@ -503,22 +521,6 @@ qwerty_src/build/src/simplewallet: qwerty_src/build/Makefile
 
 qwerty: qwerty_src/build/src/qwertyd qwerty_src/build/src/simplewallet
 
-turtle_src:
-	git clone --recursive https://github.com/turtlecoin/turtlecoin.git turtle_src
-
-turtle_check:
-	@if [ -d "turtle_src" ]; then cd turtle_src ; git fetch -v --dry-run; fi
-
-turtle_src/build/Makefile: turtle_src
-	cd turtle_src && (patch -p1 <../turtle_patch) && mkdir build && cd build && cmake ..
-
-turtle_src/build/src/TurtleCoind: turtle_src/build/Makefile
-	cd turtle_src/build && make -j8 TurtleCoind
-
-turtle_src/build/src/turtle-service: turtle_src/build/Makefile
-	cd turtle_src/build && make -j8 service zedwallet
-
-turtle: turtle_src/build/src/TurtleCoind turtle_src/build/src/turtle-service
 
 #_src:
 #	git clone --recursive  _src
@@ -549,5 +551,5 @@ turtle: turtle_src/build/src/TurtleCoind turtle_src/build/src/turtle-service
 #: _src/build/src/d _src/build/src/simplewallet
 
 
-.PHONY : qwerty_check turtle_check check all tyche turtle qwerty wownero niobio b2b btcn lines triton iridium kepl ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : qwerty_check check all safex xcash tyche qwerty wownero niobio b2b btcn lines triton iridium ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
