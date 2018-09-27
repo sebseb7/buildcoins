@@ -1,4 +1,4 @@
-all: wownero safex xcash tyche qwerty arqma niobio b2b btcn lines triton iridium ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: wownero safex xcash citi tyche qwerty arqma niobio b2b btcn lines triton iridium ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 check: qwerty_check
 
@@ -463,7 +463,7 @@ wownero_src:
 	git clone --recursive https://github.com/wownero/wownero.git wownero_src
 
 wownero_src/build/Makefile: wownero_src
-	cd wownero_src && git checkout 6177e8e062e4e80dc4b24e023a3b015807a51f31 && mkdir build && cd build && cmake ..
+	cd wownero_src && git checkout 6177e8e062e4e80dc4b24e023a3b015807a51f31 && mkdir -p build && cd build && cmake ..
 
 wownero_src/build/bin/wownerod: wownero_src/build/Makefile
 	cd wownero_src/build && make -j8 daemon blockchain_import blockchain_export
@@ -478,7 +478,7 @@ safex_src:
 	git clone --recursive https://github.com/safex/safexcore.git safex_src
 
 safex_src/build/Makefile: safex_src
-	cd safex_src && mkdir build && cd build && cmake -D BUILD_WALLET_RPC=ON -D BUILD_ADVANCED_WALLET=ON ..
+	cd safex_src && mkdir -p build && cd build && cmake -D BUILD_WALLET_RPC=ON -D BUILD_ADVANCED_WALLET=ON ..
 
 safex_src/build/bin/safexd: safex_src/build/Makefile
 	cd safex_src/build && make -j8 daemon blockchain_import blockchain_export
@@ -502,6 +502,21 @@ xcash_src/build/bin/xcash-wallet-cli : xcash_src/build/Makefile
 	cd xcash_src/build && make -j8 simplewallet wallet_rpc_server
 
 xcash: xcash_src/build/bin/xcashd xcash_src/build/bin/xcash-wallet-cli
+
+
+citi_src:
+	git clone --recursive https://github.com/citicashio/citicash.git citi_src
+
+citi_src/build/Makefile: citi_src
+	cd xcash_src && mkdir build && cd build && cmake ..
+
+citi_src/build/bin/citicashd: citi_src/build/Makefile
+	cd citi_src/build && make -j8 daemon blockchain_import blockchain_export
+
+citi_src/build/bin/citicash-wallet-cli : citi_src/build/Makefile
+	cd citi_src/build && make -j8 simplewallet wallet_rpc_server
+
+citi: citi_src/build/bin/citicashd citi_src/build/bin/citicash-wallet-cli
 
 
 qwerty_src:
@@ -551,5 +566,5 @@ qwerty: qwerty_src/build/src/qwertyd qwerty_src/build/src/simplewallet
 #: _src/build/src/d _src/build/src/simplewallet
 
 
-.PHONY : qwerty_check check all safex xcash tyche qwerty wownero niobio b2b btcn lines triton iridium ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : qwerty_check check all safex xcash citi tyche qwerty wownero niobio b2b btcn lines triton iridium ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
