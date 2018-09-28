@@ -1,4 +1,4 @@
-all: wownero safex xcash citi tyche qwerty arqma niobio b2b btcn lines triton iridium ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: wownero nerva safex xcash citi tyche qwerty arqma niobio b2b btcn lines triton iridium ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 check: qwerty_check
 
@@ -519,6 +519,21 @@ citi_src/build/bin/citicash-wallet-cli : citi_src/build/Makefile
 citi: citi_src/build/bin/citicashd citi_src/build/bin/citicash-wallet-cli
 
 
+nerva_src:
+	git clone --recursive https://github.com/angrywasp/nerva.git nerva_src
+
+nerva_src/build/Makefile: nerva_src
+	cd nerva_src && mkdir build && cd build && cmake ..
+
+nerva_src/build/bin/nervad: nerva_src/build/Makefile
+	cd nerva_src/build && make -j8 daemon blockchain_import blockchain_export
+
+nerva_src/build/bin/nerva-wallet-cli : nerva_src/build/Makefile
+	cd nerva_src/build && make -j8 simplewallet wallet_rpc_server
+
+nerva: nerva_src/build/bin/nervad nerva_src/build/bin/nerva-wallet-cli
+
+
 qwerty_src:
 	git clone --recursive https://github.com/qwertycoin-org/qwertycoin.git qwerty_src
 
@@ -566,5 +581,5 @@ qwerty: qwerty_src/build/src/qwertyd qwerty_src/build/src/simplewallet
 #: _src/build/src/d _src/build/src/simplewallet
 
 
-.PHONY : qwerty_check check all safex xcash citi tyche qwerty wownero niobio b2b btcn lines triton iridium ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : qwerty_check check all nerva safex xcash citi tyche qwerty wownero niobio b2b btcn lines triton iridium ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
