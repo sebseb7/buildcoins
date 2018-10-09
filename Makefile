@@ -48,7 +48,7 @@ monero_src:
 	git clone --recursive https://github.com/monero-project/monero.git monero_src
 
 monero_src/build/Makefile: monero_src
-	cd monero_src && mkdir build && cd build && cmake ..
+	cd monero_src && mkdir -p build && cd build && cmake ..
 
 monero_src/build/src/monerod: monero_src/build/Makefile
 	cd monero_src/build && make -j8 daemon blockchain_import blockchain_export
@@ -372,18 +372,18 @@ iridium_src/build/src/iridium_simplewallet: iridium_src/build/Makefile
 iridium: iridium_src/build/src/iridiumd iridium_src/build/src/iridium_simplewallet
 
 triton_src:
-	git clone --recursive https://github.com/Triton-io/Triton.git  triton_src
+	git clone --recursive https://github.com/TritonNetwork/Triton-New.git  triton_src
 
 triton_src/build/Makefile: triton_src
-	cd triton_src && (patch -p1 <../triton_patch) && mkdir build && cd build && cmake ..
+	cd triton_src && mkdir build && cd build && cmake ..
 
-triton_src/build/src/Tritond: triton_src/build/Makefile
-	cd triton_src/build && make -j8 Daemon
+triton_src/build/src/tritond: triton_src/build/Makefile
+	cd triton_src/build && make -j8 daemon blockchain_import blockchain_export
 
-triton_src/build/src/TritonSimpleWallet: triton_src/build/Makefile
-	cd triton_src/build && make -j8 SimpleWallet
+triton_src/build/src/triton-wallet-cli: triton_src/build/Makefile
+	cd triton_src/build && make -j8 simplewallet wallet_rpc_server
 
-triton: triton_src/build/src/Tritond triton_src/build/src/TritonSimpleWallet
+triton: triton_src/build/src/tritond triton_src/build/src/triton-wallet-cli
 
 lines_src:
 	git clone --recursive https://github.com/linescoin/lines.git  lines_src
