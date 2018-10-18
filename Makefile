@@ -45,7 +45,7 @@ electroneum_src/build/src/electroneum-wallet-cli: electroneum_src/build/Makefile
 electroneum: electroneum_src/build/src/electroneumd electroneum_src/build/src/electroneum-wallet-cli
 
 monero_src:
-	git clone --recursive https://github.com/monero-project/monero.git monero_src
+	git clone --recursive  --single-branch -b release-v0.13 https://github.com/monero-project/monero.git monero_src
 
 monero_src/build/Makefile: monero_src
 	cd monero_src && mkdir -p build && cd build && cmake ..
