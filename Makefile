@@ -276,24 +276,24 @@ monerov_src/build/bin/monerovd: monerov_src/build/Makefile
 	cd monerov_src/build && make -j8 daemon blockchain_import blockchain_export
 
 monerov_src/build/bin/monerov-wallet-cli : monerov_src/build/Makefile
-	cd monerov_src/build && make -j8 simplewallet
+	cd monerov_src/build && make -j8 simplewallet wallet_rpc_server
 
 monerov: monerov_src/build/bin/monerovd monerov_src/build/bin/monerov-wallet-cli
 
 
 intense_src:
-	git clone --recursive https://github.com/valiant1x/intensecoin.git intense_src
+	git clone --recursive https://github.com/LetheanMovement/lethean.git intense_src
 
 intense_src/build/Makefile: intense_src
 	cd intense_src && mkdir build && cd build && cmake ..
 
-intense_src/build/bin/intensecoind: intense_src/build/Makefile
+intense_src/build/bin/letheand: intense_src/build/Makefile
 	cd intense_src/build && make -j8 daemon blockchain_import blockchain_export
 
-intense_src/build/bin/intense-wallet-cli : intense_src/build/Makefile
+intense_src/build/bin/lethean-wallet-cli : intense_src/build/Makefile
 	cd intense_src/build && make -j8 simplewallet wallet_rpc_server
 
-intense: intense_src/build/bin/intensecoind intense_src/build/bin/intense-wallet-cli
+intense: intense_src/build/bin/letheand intense_src/build/bin/lethean-wallet-cli
 
 
 solace_src:
