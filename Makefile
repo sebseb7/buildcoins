@@ -45,7 +45,7 @@ electroneum_src/build/src/electroneum-wallet-cli: electroneum_src/build/Makefile
 electroneum: electroneum_src/build/src/electroneumd electroneum_src/build/src/electroneum-wallet-cli
 
 monero_src:
-	git clone --recursive https://github.com/monero-project/monero.git monero_src
+	git clone --recursive  --single-branch -b release-v0.13 https://github.com/monero-project/monero.git monero_src
 
 monero_src/build/Makefile: monero_src
 	cd monero_src && mkdir -p build && cd build && cmake ..
@@ -276,7 +276,7 @@ monerov_src/build/bin/monerovd: monerov_src/build/Makefile
 	cd monerov_src/build && make -j8 daemon blockchain_import blockchain_export
 
 monerov_src/build/bin/monerov-wallet-cli : monerov_src/build/Makefile
-	cd monerov_src/build && make -j8 simplewallet
+	cd monerov_src/build && make -j8 simplewallet wallet_rpc_server
 
 monerov: monerov_src/build/bin/monerovd monerov_src/build/bin/monerov-wallet-cli
 
@@ -287,13 +287,13 @@ intense_src:
 intense_src/build/Makefile: intense_src
 	cd intense_src && mkdir build && cd build && cmake ..
 
-intense_src/build/bin/intensecoind: intense_src/build/Makefile
+intense_src/build/bin/letheand: intense_src/build/Makefile
 	cd intense_src/build && make -j8 daemon blockchain_import blockchain_export
 
-intense_src/build/bin/intense-wallet-cli : intense_src/build/Makefile
+intense_src/build/bin/lethean-wallet-cli : intense_src/build/Makefile
 	cd intense_src/build && make -j8 simplewallet wallet_rpc_server
 
-intense: intense_src/build/bin/intensecoind intense_src/build/bin/intense-wallet-cli
+intense: intense_src/build/bin/letheand intense_src/build/bin/lethean-wallet-cli
 
 
 solace_src:
@@ -372,7 +372,7 @@ iridium_src/build/src/iridium_simplewallet: iridium_src/build/Makefile
 iridium: iridium_src/build/src/iridiumd iridium_src/build/src/iridium_simplewallet
 
 triton_src:
-	git clone --recursive https://github.com/TritonNetwork/Triton-New.git  triton_src
+	git clone --recursive https://github.com/TritonNetwork/TritonProtocol triton_src
 
 triton_src/build/Makefile: triton_src
 	cd triton_src && mkdir build && cd build && cmake ..
