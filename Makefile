@@ -282,7 +282,7 @@ monerov: monerov_src/build/bin/monerovd monerov_src/build/bin/monerov-wallet-cli
 
 
 intense_src:
-	git clone --recursive https://github.com/valiant1x/intensecoin.git intense_src
+	git clone --recursive https://github.com/LetheanMovement/lethean.git intense_src
 
 intense_src/build/Makefile: intense_src
 	cd intense_src && mkdir build && cd build && cmake ..
