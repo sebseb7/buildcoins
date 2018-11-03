@@ -372,7 +372,7 @@ iridium_src/build/src/iridium_simplewallet: iridium_src/build/Makefile
 iridium: iridium_src/build/src/iridiumd iridium_src/build/src/iridium_simplewallet
 
 triton_src:
-	git clone --recursive https://github.com/TritonNetwork/Triton-New.git  triton_src
+	git clone --recursive https://github.com/TritonNetwork/TritonProtocol triton_src
 
 triton_src/build/Makefile: triton_src
 	cd triton_src && mkdir build && cd build && cmake ..
