@@ -1,4 +1,4 @@
-all: wownero nerva safex xcash citi tyche qwerty arqma niobio b2b btcn lines triton iridium ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: wownero nerva safex xcash citi tyche qwerty arqma niobio b2b btcn lines triton iridium ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki freehaven haven intense
 
 check: qwerty_check
 
@@ -219,6 +219,21 @@ haven_src/build/bin/haven-wallet-cli : haven_src/build/Makefile
 	cd haven_src/build && make -j8 simplewallet wallet_rpc_server
 
 haven: haven_src/build/bin/havend haven_src/build/bin/haven-wallet-cli
+
+
+freehaven_src:
+	git clone --recursive https://github.com/freehavenprotocol/freehaven.git freehaven_src
+
+freehaven_src/build/Makefile: freehaven_src
+	cd freehaven_src && mkdir build && cd build && cmake ..
+
+freehaven_src/build/bin/freehavend: freehaven_src/build/Makefile
+	cd freehaven_src/build && make -j8 daemon blockchain_import blockchain_export
+
+freehaven_src/build/bin/freehaven-wallet-cli : freehaven_src/build/Makefile
+	cd freehaven_src/build && make -j8 simplewallet wallet_rpc_server
+
+freehaven: freehaven_src/build/bin/freehavend freehaven_src/build/bin/freehaven-wallet-cli
 
 
 loki_src:
@@ -581,5 +596,5 @@ qwerty: qwerty_src/build/src/qwertyd qwerty_src/build/src/simplewallet
 #: _src/build/src/d _src/build/src/simplewallet
 
 
-.PHONY : qwerty_check check all nerva safex xcash citi tyche qwerty wownero niobio b2b btcn lines triton iridium ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : qwerty_check check all nerva safex xcash citi tyche qwerty wownero niobio b2b btcn lines triton iridium ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki freehaven haven intense
 
