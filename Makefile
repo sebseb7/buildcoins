@@ -3,18 +3,18 @@ all: wownero nerva safex xcash citi tyche qwerty arqma niobio b2b btcn lines tri
 check: qwerty_check
 
 italo_src:
-	git clone --recursive https://github.com/italocoin-project/italocoin.git italo_src
+	git clone --recursive https://github.com/italocoin-project/italo.git italo_src
 
 italo_src/build/Makefile: italo_src
 	cd italo_src && mkdir build && cd build && cmake ..
 
-italo_src/build/src/italocoind: italo_src/build/Makefile
+italo_src/build/src/italod: italo_src/build/Makefile
 	cd italo_src/build && make -j8 daemon blockchain_import blockchain_export
 
-italo_src/build/src/italocoin-wallet-cli: italo_src/build/Makefile
+italo_src/build/src/italo-wallet-cli: italo_src/build/Makefile
 	cd italo_src/build && make -j8 simplewallet wallet_rpc_server
 
-italo: italo_src/build/src/italocoind italo_src/build/src/italocoin-wallet-cli
+italo: italo_src/build/src/italod italo_src/build/src/italo-wallet-cli
 
 arqma_src:
 	git clone --recursive https://github.com/arqma/arqma.git arqma_src
