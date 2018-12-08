@@ -1,4 +1,4 @@
-all: swap wownero nerva safex xcash citi tyche qwerty arqma niobio b2b btcn lines triton iridium ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: wownero swap nerva safex xcash citi tyche qwerty arqma niobio b2b btcn lines triton iridium ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 check: qwerty_check
 
@@ -17,18 +17,18 @@ swap_src/build/src/swap-wallet-cli: swap_src/build/Makefile
 italo: italo_src/build/src/italocoind italo_src/build/src/italocoin-wallet-cli
 
 italo_src:
-	git clone --recursive https://github.com/italocoin-project/italocoin.git italo_src
+	git clone --recursive https://github.com/italocoin-project/italo.git italo_src
 
 italo_src/build/Makefile: italo_src
 	cd italo_src && mkdir build && cd build && cmake ..
 
-italo_src/build/src/italocoind: italo_src/build/Makefile
+italo_src/build/src/italod: italo_src/build/Makefile
 	cd italo_src/build && make -j8 daemon blockchain_import blockchain_export
 
-italo_src/build/src/italocoin-wallet-cli: italo_src/build/Makefile
+italo_src/build/src/italo-wallet-cli: italo_src/build/Makefile
 	cd italo_src/build && make -j8 simplewallet wallet_rpc_server
 
-italo: italo_src/build/src/italocoind italo_src/build/src/italocoin-wallet-cli
+italo: italo_src/build/src/italod italo_src/build/src/italo-wallet-cli
 
 arqma_src:
 	git clone --recursive https://github.com/arqma/arqma.git arqma_src
@@ -386,7 +386,7 @@ iridium_src/build/src/iridium_simplewallet: iridium_src/build/Makefile
 iridium: iridium_src/build/src/iridiumd iridium_src/build/src/iridium_simplewallet
 
 triton_src:
-	git clone --recursive https://github.com/TritonNetwork/Triton-New.git  triton_src
+	git clone --recursive https://github.com/TritonNetwork/TritonProtocol triton_src
 
 triton_src/build/Makefile: triton_src
 	cd triton_src && mkdir build && cd build && cmake ..
@@ -595,5 +595,5 @@ qwerty: qwerty_src/build/src/qwertyd qwerty_src/build/src/simplewallet
 #: _src/build/src/d _src/build/src/simplewallet
 
 
-.PHONY : qwerty_check swap check all nerva safex xcash citi tyche qwerty wownero niobio b2b btcn lines triton iridium ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : qwerty_check check all swap nerva safex xcash citi tyche qwerty wownero niobio b2b btcn lines triton iridium ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
