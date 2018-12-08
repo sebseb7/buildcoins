@@ -1,6 +1,20 @@
-all: wownero nerva safex xcash citi tyche qwerty arqma niobio b2b btcn lines triton iridium ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: swap wownero nerva safex xcash citi tyche qwerty arqma niobio b2b btcn lines triton iridium ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 check: qwerty_check
+
+swap_src:
+	git clone --recursive https://github.com/swap-dev/swap.git swap_src
+
+swap_src/build/Makefile: swap_src
+	cd swap_src && mkdir build && cd build && cmake ..
+
+swap_src/build/src/swapd: swap_src/build/Makefile
+	cd swap_src/build && make -j8 daemon blockchain_import blockchain_export
+
+swap_src/build/src/swap-wallet-cli: swap_src/build/Makefile
+	cd swap_src/build && make -j8 simplewallet wallet_rpc_server
+
+italo: italo_src/build/src/italocoind italo_src/build/src/italocoin-wallet-cli
 
 italo_src:
 	git clone --recursive https://github.com/italocoin-project/italocoin.git italo_src
@@ -581,5 +595,5 @@ qwerty: qwerty_src/build/src/qwertyd qwerty_src/build/src/simplewallet
 #: _src/build/src/d _src/build/src/simplewallet
 
 
-.PHONY : qwerty_check check all nerva safex xcash citi tyche qwerty wownero niobio b2b btcn lines triton iridium ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : qwerty_check swap check all nerva safex xcash citi tyche qwerty wownero niobio b2b btcn lines triton iridium ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
