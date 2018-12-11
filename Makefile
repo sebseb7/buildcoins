@@ -433,7 +433,7 @@ b2b_src:
 	git clone --recursive https://github.com/oliviersinnaeve/b2bcoin.git b2b_src
 
 b2b_src/build/Makefile: b2b_src
-	cd b2b_src && (patch -p1 <../b2b_patch) && mkdir build && cd build && cmake ..
+	cd b2b_src && mkdir build && cd build && cmake ..
 
 b2b_src/build/src/b2bcoind: b2b_src/build/Makefile
 	cd b2b_src/build && make -j8 Daemon
