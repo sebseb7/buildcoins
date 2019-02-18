@@ -1,6 +1,19 @@
-all: wownero swap nerva safex xcash citi tyche qwerty arqma niobio b2b btcn lines triton iridium ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: wownero grin swap nerva safex xcash citi tyche qwerty arqma niobio b2b btcn lines triton iridium ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
 check: qwerty_check
+
+grin_src:
+	git clone https://github.com/mimblewimble/grin grin_src
+wallet713_src:
+	git clone https://github.com/vault713/wallet713.git wallet713_src
+
+grin_src/target/release/grin: grin_src
+	cd grin_src && cargo build --release
+
+wallet713_src/target/release/wallet713: wallet713_src
+	cd wallet713_src && cargo build --release
+
+grin: grin_src/target/release/grin wallet713_src/target/release/wallet713
 
 swap_src:
 	git clone --recursive https://github.com/swap-dev/swap.git swap_src
@@ -13,6 +26,8 @@ swap_src/build/src/swapd: swap_src/build/Makefile
 
 swap_src/build/src/swap-wallet-cli: swap_src/build/Makefile
 	cd swap_src/build && make -j8 simplewallet wallet_rpc_server
+
+swap: swap_src/build/src/swapd swap_src/build/src/swap-wallet-cli
 
 italo: italo_src/build/src/italocoind italo_src/build/src/italocoin-wallet-cli
 
@@ -595,5 +610,5 @@ qwerty: qwerty_src/build/src/qwertyd qwerty_src/build/src/simplewallet
 #: _src/build/src/d _src/build/src/simplewallet
 
 
-.PHONY : qwerty_check check all swap nerva safex xcash citi tyche qwerty wownero niobio b2b btcn lines triton iridium ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : qwerty_check check all grin swap nerva safex xcash citi tyche qwerty wownero niobio b2b btcn lines triton iridium ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
 
