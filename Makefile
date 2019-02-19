@@ -4,6 +4,7 @@ check: qwerty_check
 
 grin_src:
 	git clone https://github.com/mimblewimble/grin grin_src
+	cd grin_src && (patch -p1 <../grin_patch)
 wallet713_src:
 	git clone https://github.com/vault713/wallet713.git wallet713_src
 
