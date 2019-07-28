@@ -1,6 +1,153 @@
-all: wownero grin swap nerva safex xcash citi tyche qwerty arqma niobio b2b btcn lines triton iridium ombre ryo sumo solace arto karbo italo electroneum monero ipbc aeon bittube alloy bbs edollar elya graft monerov stellite masari loki haven intense
+all: swap monero aeon bittube graft torque masari haven
+all_e: swap_e aeon_e monero_e bittube_e graft_e haven_e masari_e torque_e
+all_i: swap_i aeon_i monero_i bittube_i graft_i haven_i masari_i torque_i
 
 check: qwerty_check
+
+
+swap_src:
+	git clone --recursive --single-branch --branch swap-3-cleanup-devel --depth=1 https://github.com/swap-dev/swap.git swap_src
+swap_src/build/Makefile: swap_src
+	cd swap_src && mkdir build && cd build && cmake ..
+swap_src/build/bin/swapd: swap_src/build/Makefile
+	cd swap_src/build && make -j3 daemon
+swap_src/build/bin/swap-blockchain-export: swap_src/build/Makefile
+	cd swap_src/build && make -j3 blockchain_export
+swap_src/build/bin/swap-blockchain-import: swap_src/build/Makefile
+	cd swap_src/build && make -j3 blockchain_import
+swap_src/build/bin/swap-wallet-cli: swap_src/build/Makefile
+	cd swap_src/build && make -j3 simplewallet wallet_rpc_server
+
+swap: swap_e swap_i swap_src/build/bin/swapd swap_src/build/bin/swap-wallet-cli
+swap_e: swap_src/build/bin/swap-blockchain-export
+swap_i: swap_src/build/bin/swap-blockchain-import
+
+
+aeon_src:
+	git clone --recursive --single-branch --depth=1 https://github.com/aeonix/aeon.git aeon_src
+aeon_src/build/Makefile: aeon_src
+	cd aeon_src && mkdir build && cd build && cmake ..
+aeon_src/build/bin/aeond: aeon_src/build/Makefile
+	cd aeon_src/build && make -j3 daemon
+aeon_src/build/bin/aeon-blockchain-export: aeon_src/build/Makefile
+	cd aeon_src/build && make -j3 blockchain_export
+aeon_src/build/bin/aeon-blockchain-import: aeon_src/build/Makefile
+	cd aeon_src/build && make -j3 blockchain_import
+aeon_src/build/bin/aeon-wallet-cli: aeon_src/build/Makefile
+	cd aeon_src/build && make -j3 simplewallet wallet_rpc_server
+
+aeon: aeon_e aeon_i aeon_src/build/bin/aeond aeon_src/build/bin/aeon-wallet-cli
+aeon_e: aeon_src/build/bin/aeon-blockchain-export
+aeon_i: aeon_src/build/bin/aeon-blockchain-import
+
+
+monero_src:
+	git clone --recursive --single-branch -b release-v0.14 --depth=1 https://github.com/monero-project/monero.git monero_src
+monero_src/build/Makefile: monero_src
+	cd monero_src && mkdir -p build && cd build && cmake ..
+monero_src/build/bin/monerod: monero_src/build/Makefile
+	cd monero_src/build && make -j3 daemon
+monero_src/build/bin/monero-blockchain-export: monero_src/build/Makefile
+	cd monero_src/build && make -j3 blockchain_export
+monero_src/build/bin/monero-blockchain-import: monero_src/build/Makefile
+	cd monero_src/build && make -j3 blockchain_import
+monero_src/build/bin/monero-wallet-cli: monero_src/build/Makefile
+	cd monero_src/build && make -j3 simplewallet
+
+monero: monero_e monero_i monero_src/build/bin/monerod monero_src/build/bin/monero-wallet-cli
+monero_e: monero_src/build/bin/monero-blockchain-export
+monero_i: monero_src/build/bin/monero-blockchain-import
+
+
+bittube_src:
+	git clone --recursive --single-branch --depth=1 https://github.com/ipbc-dev/bittube.git bittube_src
+bittube_src/build/Makefile: bittube_src
+	cd bittube_src && mkdir build && cd build && cmake ..
+bittube_src/build/bin/bittubed: bittube_src/build/Makefile
+	cd bittube_src/build && make -j3 daemon
+bittube_src/build/bin/bittube-blockchain-export: bittube_src/build/Makefile
+	cd bittube_src/build && make -j3 blockchain_export
+bittube_src/build/bin/bittube-blockchain-import: bittube_src/build/Makefile
+	cd bittube_src/build && make -j3 blockchain_import
+bittube_src/build/bin/bittube-wallet-cli: bittube_src/build/Makefile
+	cd bittube_src/build && make -j3 simplewallet wallet_rpc_server
+
+bittube: bittube_e bittube_i bittube_src/build/bin/bittubed bittube_src/build/bin/bittube-wallet-cli
+bittube_e: bittube_src/build/bin/bittube-blockchain-export
+bittube_i: bittube_src/build/bin/bittube-blockchain-import
+
+
+graft_src:
+	git clone --recursive --single-branch --depth=1 https://github.com/graft-project/GraftNetwork.git graft_src
+graft_src/build/Makefile: graft_src
+	cd graft_src && mkdir build && cd build && cmake ..
+graft_src/build/bin/graftnoded: graft_src/build/Makefile
+	cd graft_src/build && make -j3 daemon
+graft_src/build/bin/graft-blockchain-export: graft_src/build/Makefile
+	cd graft_src/build && make -j3 blockchain_export
+graft_src/build/bin/graft-blockchain-import: graft_src/build/Makefile
+	cd graft_src/build && make -j3 blockchain_import
+graft_src/build/bin/graft-wallet-cli : graft_src/build/Makefile
+	cd graft_src/build && make -j3 simplewallet wallet_rpc_server
+
+graft: graft_e graft_i graft_src/build/bin/graftnoded graft_src/build/bin/graft-wallet-cli
+graft_e: graft_src/build/bin/graft-blockchain-export
+graft_i: graft_src/build/bin/graft-blockchain-import
+
+
+haven_src:
+	git clone --recursive --single-branch --depth=1 https://github.com/haven-protocol-org/haven.git haven_src
+haven_src/build/Makefile: haven_src
+	cd haven_src && mkdir build && cd build && cmake ..
+haven_src/build/bin/havend: haven_src/build/Makefile
+	cd haven_src/build && make -j3 daemon
+haven_src/build/bin/haven-blockchain-export: haven_src/build/Makefile
+	cd haven_src/build && make -j3 blockchain_export
+haven_src/build/bin/haven-blockchain-import: haven_src/build/Makefile
+	cd haven_src/build && make -j3 blockchain_import
+haven_src/build/bin/haven-wallet-cli: haven_src/build/Makefile
+	cd haven_src/build && make -j3 simplewallet wallet_rpc_server
+
+haven: haven_e haven_i haven_src/build/bin/havend haven_src/build/bin/haven-wallet-cli
+haven_e: haven_src/build/bin/haven-blockchain-export
+haven_i: haven_src/build/bin/haven-blockchain-import
+
+
+masari_src:
+	git clone --recursive --single-branch --depth=1 https://github.com/masari-project/masari.git masari_src
+masari_src/build/Makefile: masari_src
+	cd masari_src && mkdir build && cd build && cmake ..
+masari_src/build/bin/masarid: masari_src/build/Makefile
+	cd masari_src/build && make -j3 daemon
+masari_src/build/bin/masari-blockchain-export: masari_src/build/Makefile
+	cd masari_src/build && make -j3 blockchain_export
+masari_src/build/bin/masari-blockchain-import: masari_src/build/Makefile
+	cd masari_src/build && make -j3 blockchain_import
+masari_src/build/bin/masari-wallet-cli : masari_src/build/Makefile
+	cd masari_src/build && make -j3 simplewallet wallet_rpc_server
+
+masari: masari_e masari_i masari_src/build/bin/masarid masari_src/build/bin/masari-wallet-cli
+masari_e: masari_src/build/bin/masari-blockchain-export
+masari_i: masari_src/build/bin/masari-blockchain-import
+
+
+torque_src:
+	git clone --recursive https://github.com/scala-network/Torque.git torque_src
+torque_src/build/Makefile: torque_src
+	cd torque_src && mkdir build && cd build && cmake ..
+torque_src/build/bin/torqued: torque_src/build/Makefile
+	cd torque_src/build && make -j3 daemon
+torque_src/build/bin/torque-blockchain-export: torque_src/build/Makefile
+	cd torque_src/build && make -j3 blockchain_export
+torque_src/build/bin/torque-blockchain-import: torque_src/build/Makefile
+	cd torque_src/build && make -j3 blockchain_import
+torque_src/build/bin/torque-wallet-cli : torque_src/build/Makefile
+	cd torque_src/build && make -j3 simplewallet wallet_rpc_server
+
+torque: torque_e torque_i torque_src/build/bin/torqued torque_src/build/bin/torque-wallet-cli
+torque_e: torque_src/build/bin/torque-blockchain-export
+torque_i: torque_src/build/bin/torque-blockchain-import
+
 
 grin_src:
 	git clone https://github.com/mimblewimble/grin grin_src
@@ -15,20 +162,6 @@ wallet713_src/target/release/wallet713: wallet713_src
 	cd wallet713_src && cargo build --release
 
 grin: grin_src/target/release/grin wallet713_src/target/release/wallet713
-
-swap_src:
-	git clone --recursive https://github.com/swap-dev/swap.git swap_src
-
-swap_src/build/Makefile: swap_src
-	cd swap_src && mkdir build && cd build && cmake ..
-
-swap_src/build/src/swapd: swap_src/build/Makefile
-	cd swap_src/build && make -j8 daemon blockchain_import blockchain_export
-
-swap_src/build/src/swap-wallet-cli: swap_src/build/Makefile
-	cd swap_src/build && make -j8 simplewallet wallet_rpc_server
-
-swap: swap_src/build/src/swapd swap_src/build/src/swap-wallet-cli
 
 italo: italo_src/build/src/italocoind italo_src/build/src/italocoin-wallet-cli
 
@@ -74,20 +207,6 @@ electroneum_src/build/src/electroneum-wallet-cli: electroneum_src/build/Makefile
 
 electroneum: electroneum_src/build/src/electroneumd electroneum_src/build/src/electroneum-wallet-cli
 
-monero_src:
-	git clone --recursive  --single-branch -b release-v0.13 https://github.com/monero-project/monero.git monero_src
-
-monero_src/build/Makefile: monero_src
-	cd monero_src && mkdir -p build && cd build && cmake ..
-
-monero_src/build/src/monerod: monero_src/build/Makefile
-	cd monero_src/build && make -j8 daemon blockchain_import blockchain_export
-
-monero_src/build/src/monero-wallet-cli: monero_src/build/Makefile
-	cd monero_src/build && make -j8 simplewallet
-
-monero: monero_src/build/src/monerod monero_src/build/src/monero-wallet-cli
-
 ipbc_src:
 	git clone --recursive https://github.com/muncoin/ipbc.git ipbc_src
 
@@ -102,33 +221,7 @@ ipbc_src/build/src/ipbc-wallet-cli: ipbc_src/build/Makefile
 
 ipbc: ipbc_src/build/src/ipbcd ipbc_src/build/src/ipbc-wallet-cli
 
-bittube_src:
-	git clone --recursive https://github.com/ipbc-dev/bittube.git bittube_src
 
-bittube_src/build/Makefile: bittube_src
-	cd bittube_src && mkdir build && cd build && cmake ..
-
-bittube_src/build/src/bittubed: bittube_src/build/Makefile
-	cd bittube_src/build && make -j8 daemon blockchain_import blockchain_export
-
-bittube_src/build/src/bittube-wallet-cli: bittube_src/build/Makefile
-	cd bittube_src/build && make -j8 simplewallet wallet_rpc_server
-
-bittube: bittube_src/build/src/bittubed bittube_src/build/src/bittube-wallet-cli
-
-aeon_src:
-	git clone --recursive https://github.com/aeonix/aeon.git aeon_src
-
-aeon_src/build/Makefile: aeon_src
-	cd aeon_src && mkdir build && cd build && cmake ..
-
-aeon_src/build/src/aeond: aeon_src/build/Makefile
-	cd aeon_src/build && make -j8 daemon blockchain_import blockchain_export
-
-aeon_src/build/src/aeon-wallet-cli: aeon_src/build/Makefile
-	cd aeon_src/build && make -j8 simplewallet wallet_rpc_server
-
-aeon: aeon_src/build/src/aeond aeon_src/build/src/aeon-wallet-cli
 
 
 alloy_src:
@@ -206,19 +299,6 @@ edollar_src/build/bin/edollar-wallet-cli : edollar_src/build/Makefile
 edollar: edollar_src/build/bin/edollard edollar_src/build/bin/edollar-wallet-cli
 
 
-graft_src:
-	git clone --recursive https://github.com/graft-project/GraftNetwork.git graft_src
-
-graft_src/build/Makefile: graft_src
-	cd graft_src && mkdir build && cd build && cmake ..
-
-graft_src/build/bin/graftnoded: graft_src/build/Makefile
-	cd graft_src/build && make -j8 daemon blockchain_import blockchain_export
-
-graft_src/build/bin/graft-wallet-cli : graft_src/build/Makefile
-	cd graft_src/build && make -j8 simplewallet wallet_rpc_server
-
-graft: graft_src/build/bin/graftnoded graft_src/build/bin/graft-wallet-cli
 
 
 elya_src:
@@ -236,20 +316,6 @@ elya_src/build/src/simplewallet: elya_src/build/Makefile
 elya: elya_src/build/src/elyacoind elya_src/build/src/simplewallet
 
 
-haven_src:
-	git clone --recursive https://github.com/havenprotocol/haven.git haven_src
-
-haven_src/build/Makefile: haven_src
-	cd haven_src && mkdir build && cd build && cmake ..
-
-haven_src/build/bin/havend: haven_src/build/Makefile
-	cd haven_src/build && make -j8 daemon blockchain_import blockchain_export
-
-haven_src/build/bin/haven-wallet-cli : haven_src/build/Makefile
-	cd haven_src/build && make -j8 simplewallet wallet_rpc_server
-
-haven: haven_src/build/bin/havend haven_src/build/bin/haven-wallet-cli
-
 
 loki_src:
 	git clone --recursive https://github.com/loki-project/loki.git loki_src
@@ -266,34 +332,8 @@ loki_src/build/bin/loki-wallet-cli : loki_src/build/Makefile
 loki: loki_src/build/bin/lokid loki_src/build/bin/loki-wallet-cli
 
 
-masari_src:
-	git clone --recursive https://github.com/masari-project/masari.git masari_src
-
-masari_src/build/Makefile: masari_src
-	cd masari_src && mkdir build && cd build && cmake ..
-
-masari_src/build/bin/masarid: masari_src/build/Makefile
-	cd masari_src/build && make -j8 daemon blockchain_import blockchain_export
-
-masari_src/build/bin/masari-wallet-cli : masari_src/build/Makefile
-	cd masari_src/build && make -j8 simplewallet wallet_rpc_server
-
-masari: masari_src/build/bin/masarid masari_src/build/bin/masari-wallet-cli
 
 
-stellite_src:
-	git clone --recursive https://github.com/stellitecoin/Stellite.git stellite_src
-
-stellite_src/build/Makefile: stellite_src
-	cd stellite_src && mkdir build && cd build && cmake ..
-
-stellite_src/build/bin/stellited: stellite_src/build/Makefile
-	cd stellite_src/build && make -j8 daemon blockchain_import blockchain_export
-
-stellite_src/build/bin/stellite-wallet-cli : stellite_src/build/Makefile
-	cd stellite_src/build && make -j8 simplewallet wallet_rpc_server
-
-stellite: stellite_src/build/bin/stellited stellite_src/build/bin/stellite-wallet-cli
 
 
 monerov_src:
@@ -611,5 +651,5 @@ qwerty: qwerty_src/build/src/qwertyd qwerty_src/build/src/simplewallet
 #: _src/build/src/d _src/build/src/simplewallet
 
 
-.PHONY : qwerty_check check all grin swap nerva safex xcash citi tyche qwerty wownero niobio b2b btcn lines triton iridium ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov stellite masari loki haven intense
+.PHONY : qwerty_check check all all_e torque_e swap_e aeon_e monero_e bittube_e graft_e haven_e masari_e all_i torque_i swap_i aeon_i monero_i bittube_i graft_i haven_i masari_i grin swap nerva safex xcash citi tyche qwerty wownero niobio b2b btcn lines triton iridium ombre ryo sumo solace italo arto karbo electroneum arqma monero aeon bittube ipbc alloy bbs edollar elya graft monerov torque masari loki haven intense
 
